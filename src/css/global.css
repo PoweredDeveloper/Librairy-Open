@@ -6,13 +6,19 @@
   html {
     box-sizing: border-box;
   }
+  ::-webkit-scrollbar {
+    width: 7px;
+  }
+  ::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 10px;
+    background: rgb(82, 82, 82);
+  }
+  ::-webkit-scrollbar-thumb:window-inactive {
+    background: rgb(10, 10, 10);
+  }
 }
 
 @layer components {
-  .bg-main {
-    background-image: url('../assets/images/background/bg.jpg');
-    background-size: cover;
-  }
   .bg-blur {
     backdrop-filter: blur(10px);
   }
@@ -20,7 +26,7 @@
     @apply relative cursor-pointer;
   }
   .underline-button:after {
-    @apply absolute w-full left-0 bg-white scale-x-0;
+    @apply absolute w-full left-0 bg-brown-900 scale-x-0 rounded-full;
     content: '';
     height: 2px;
     bottom: -3px;
@@ -32,14 +38,14 @@
     transform-origin: bottom left;
   }
   .button {
-    @apply px-3 py-2 bg-transparent border border-white rounded-lg cursor-pointer;
+    @apply px-4 py-2 bg-transparent border border-white rounded-lg cursor-pointer;
   }
   .hover-button {
-    @apply hover:text-gray-300 hover:border-gray-400 cursor-pointer;
-    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+    @apply hover:text-brown-300 hover:border-brown-100 cursor-pointer;
+    transition: 0.5s;
   }
   .accent-button {
-    @apply bg-accent-400 border-transparent hover:bg-accent-500 font-semibold shadow-md shadow-accent-400 hover:shadow-accent-500 border-t-0 border-l-0 border-r-0 border-accent-50;
-    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+    @apply bg-amber-700 border-transparent hover:bg-amber-800 rounded-full;
+    transition: 0.5s;
   }
 }

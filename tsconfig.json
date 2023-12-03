@@ -28,6 +28,6 @@
     ".next/types/**/*.ts",
     "src/pages/layout.js",
     "src/app/index.js"
-  ],
+, "src/app/not-found.js"  ],
   "exclude": ["node_modules"]
 }

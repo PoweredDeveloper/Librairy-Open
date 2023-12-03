@@ -1,30 +1,54 @@
+'use client'
+
 import logo from '@/src/assets/images/logo/Logo.svg'
 import Image from 'next/image'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import clsx from 'clsx'
+import { BiTrendingUp } from 'react-icons/bi'
 
 const links: Array<[string, string]> = [
-  ['Main', '/'],
+  ['Home', '/'],
   ['Library', '/library'],
   ['Collections', '/collections'],
-  ['News', '/news']
+  ['Trending', '/trending']
 ]
 
 export default function Header() {
+  const pathname = usePathname()
   return (
-    <header className="bg-transparent flex justify-between items-center p-4 bg-blur">
+    <header
+      className={clsx(
+        'absolute top-0 w-full flex justify-between items-center bg-transparent border-b border-[#d1c6b9] max-h-[112px] transition-all',
+        {
+          'p-2': pathname != '/',
+          'p-9': pathname == '/'
+        }
+      )}
+    >
       <div className="flex flex-row items-center gap-14">
         <Image src={logo} alt="Librairy logo" height={40} width={40} />
         <ul className="flex justify-center items-center gap-20">
           {links.map(([title, link], index) => (
-            <li className="underline-button" key={index}>
+            <li
+              className={clsx('underline-button flex gap-1', {
+                'after:scale-x-[1]': pathname === link
+              })}
+              key={index}
+            >
               <Link href={link}>{title}</Link>
+              {index != links.length - 1 || <BiTrendingUp />}
             </li>
           ))}
         </ul>
       </div>
       <div>
-        <span className="hover-button mr-5">Sign In</span>
-        <span className="button accent-button">Sign Up</span>
+        <Link href="/login" className="hover-button mr-5">
+          Sign In
+        </Link>
+        <Link href="register" className="button accent-button">
+          Sign Up
+        </Link>
       </div>
     </header>
   )

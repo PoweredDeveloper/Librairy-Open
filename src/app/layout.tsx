@@ -13,14 +13,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ru" className={`${alliance.variable} font-sans`}>
+    <html lang="ru" className={`${alliance.variable} font-sans h-full`}>
       <head>
         <meta httpEquiv="Content-Type" content="text/html;charset=UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>LIBRAIRY | Main</title>
       </head>
-      <body className="text-[#f2f2f2] h-screen bg-main">
+      <body className="text-brown-900 h-full bg-brown-100">
         <Header />
         {children}
       </body>
