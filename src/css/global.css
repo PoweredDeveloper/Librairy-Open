@@ -41,11 +41,11 @@
     @apply px-4 py-2 bg-transparent border border-white rounded-lg cursor-pointer;
   }
   .hover-button {
-    @apply hover:text-brown-300 hover:border-brown-100 cursor-pointer;
-    transition: 0.5s;
+    @apply hover:text-brown-600 hover:border-brown-100 cursor-pointer;
+    transition: 0.15s;
   }
   .accent-button {
-    @apply bg-amber-700 border-transparent hover:bg-amber-800 rounded-full;
-    transition: 0.5s;
+    @apply rounded-full bg-orange-400 px-3.5 py-2.5 text-sm font-semibold text-white hover:bg-orange-500;
+    transition: 0.15s;
   }
 }

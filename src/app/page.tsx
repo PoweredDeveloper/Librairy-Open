@@ -9,14 +9,14 @@ export default function Page() {
           <br />
           Откройте для себя мир книг с AI
         </h1>
-        <h4 className="text-brown-300 font-thin mt-4 mb-8">
+        <h4 className="text-brown-500 text-lg font-thin mt-4 mb-8">
           Искусственный интеллект в вашей библиотеке
         </h4>
         <div className="flex items-center border border-brown-100 bg-white rounded-full w-min">
           <input
-            className="text-brown-900 px-4 py-2 text-lg font-extralight outline-none bg-white rounded-r-none rounded-full"
+            className="text-brown-900 px-4 py-2 text-base font-extralight outline-none bg-white rounded-r-none rounded-full"
             type="text"
-            placeholder="Search books here"
+            placeholder="Введите название книги"
           />
           <BiSearch className="text-xl mr-3 my-2" />
         </div>

@@ -18,9 +18,9 @@ export default function RootLayout({
         <meta httpEquiv="Content-Type" content="text/html;charset=UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>LIBRAIRY | Main</title>
+        <title>Librairy | Главная</title>
       </head>
-      <body className="text-brown-900 h-full bg-brown-100">
+      <body className="text-brown-900 h-full bg-white">
         <Header />
         {children}
       </body>
