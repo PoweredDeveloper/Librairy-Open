@@ -11,7 +11,6 @@
 @layer components {
   .bg-main {
     background-image: url('../assets/images/background/bg.jpg');
-    background-size: -1px;
     background-size: cover;
   }
   .bg-blur {
