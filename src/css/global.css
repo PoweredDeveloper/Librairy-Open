@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    box-sizing: border-box;
+  }
+}
+
+@layer components {
+  .bg-main {
+    background-image: url('../assets/images/background/bg.jpg');
+    background-size: -1px;
+    background-size: cover;
+  }
+  .bg-blur {
+    backdrop-filter: blur(10px);
+  }
+  .underline-button {
+    @apply relative cursor-pointer;
+  }
+  .underline-button:after {
+    @apply absolute w-full left-0 bg-white scale-x-0;
+    content: '';
+    height: 2px;
+    bottom: -3px;
+    transform-origin: bottom right;
+    transition: transform 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+  .underline-button:hover:after {
+    @apply scale-x-[1] cursor-pointer;
+    transform-origin: bottom left;
+  }
+  .button {
+    @apply px-3 py-2 bg-transparent border border-white rounded-lg cursor-pointer;
+  }
+  .hover-button {
+    @apply hover:text-gray-300 hover:border-gray-400 cursor-pointer;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+  }
+  .accent-button {
+    @apply bg-accent-400 border-transparent hover:bg-accent-500 font-semibold shadow-md shadow-accent-400 hover:shadow-accent-500 border-t-0 border-l-0 border-r-0 border-accent-50;
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+  }
+}
