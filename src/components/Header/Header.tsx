@@ -8,7 +8,7 @@ import clsx from 'clsx'
 import { useState, ReactElement } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { usePathname } from 'next/navigation'
-import { BiTrendingUp, BiHome } from 'react-icons/bi'
+import { BiTrendingUp, BiHome, BiMoney } from 'react-icons/bi'
 import { IoLibraryOutline } from 'react-icons/io5'
 import { MdOutlineCollectionsBookmark, MdLogin } from 'react-icons/md'
 import { AiOutlineRead } from 'react-icons/ai'
@@ -17,7 +17,8 @@ const links: Array<[string, ReactElement<any, any>, string]> = [
   ['Главная', <BiHome />, '/'],
   ['Библиотека', <IoLibraryOutline />, '/library'],
   ['Коллекции', <MdOutlineCollectionsBookmark />, '/collections'],
-  ['Восходящее', <BiTrendingUp />, '/trending']
+  ['Восходящее', <BiTrendingUp />, '/trending'],
+  ['Premium', <BiMoney />, '/premium']
 ]
 
 export default function Header() {
@@ -139,7 +140,7 @@ export default function Header() {
               href="/login"
               className="accent-button rounded-lg bg-brown-200 hover:bg-brown-300 text-brown-900 flex gap-2 items-center w-1/2"
             >
-              <MdLogin className='mt-0.5' />
+              <MdLogin className="mt-0.5" />
               Вход
               {/* Sign In */}
             </Link>
@@ -147,7 +148,7 @@ export default function Header() {
               href="register"
               className="accent-button rounded-lg flex gap-2 items-center w-1/2"
             >
-              <AiOutlineRead className='mt-0.5' />
+              <AiOutlineRead className="mt-0.5" />
               Регистрация
               {/* Sign Up */}
             </Link>
