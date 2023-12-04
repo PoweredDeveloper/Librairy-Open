@@ -8,18 +8,29 @@ type Props = {
     }
 }
 
+interface BookObject {
+    isbn: string,
+    title: string,
+    subtitle: string,
+    author: string,
+    published: string,
+    pages: number,
+    description: string,
+    website: string
+  }
+
 export async function generateMetadata({ params: {book_id}}: Props) {
-    const book: any = await getBookObjectFromId(book_id)
+    const book: BookObject = await getBookObjectFromId(book_id)
     return {
-        title: book.title.toString()
+        title: book.title
     }
 }
 
 export default async function BookPage({params: { book_id }}: Props) {
-    const book: [string, unknown][] = Object.entries(await getBookObjectFromId(book_id))
+    const book: [string, string | number][] = Object.entries(await getBookObjectFromId(book_id))
     return (
         <div className='flex gap-2 flex-col'>
-            {book.map(parameter => <span key={uuidv4()}>{`${parameter[0].toString()}: ${parameter[1].toString()}`}</span>)}
+            {book.map(parameter => <span key={uuidv4()}>{`${parameter[0]}: ${parameter[1]}`}</span>)}
         </div>
     )
 }
