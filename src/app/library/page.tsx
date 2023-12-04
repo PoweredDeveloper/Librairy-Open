@@ -14,7 +14,7 @@ export default async function Page() {
     <h1 className="text-brown-900 text-3xl mb-4">Library</h1>
     <ul className='flex flex-col gap-2'>
       {books.books.map((book: any) => (
-        <Link className='hover:underline' href={`/library/${book.isbn}`} key={uuidv4()}>{book.title}</Link>
+        <Link className='hover:underline' href={`/library/${book.isbn.toString()}`} key={uuidv4()}>{book.title.toString()}</Link>
       ))}
     </ul>
   </>
