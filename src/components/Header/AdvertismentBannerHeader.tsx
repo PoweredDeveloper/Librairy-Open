@@ -1,5 +1,6 @@
 import { IoIosClose } from 'react-icons/io'
 import { FaArrowRight } from 'react-icons/fa6'
+import Link from 'next/link'
 
 export default function Banner() {
   return (
@@ -43,12 +44,12 @@ export default function Banner() {
           </svg>
           Для новых пользователей 01.01.2024 - 28.02.2024.
         </p>
-        <a
-          href="#"
+        <Link
+          href="/premium"
           className="transition-colors flex flex-row items-center gap-1 rounded-full bg-brown-900 px-2 py-1 text-sm font-semibold text-white shadow-sm hover:bg-[#5e433d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brown-900"
         >
           Зарегестрироваться сейчас <FaArrowRight aria-hidden="true" />
-        </a>
+        </Link>
       </div>
       <div className="flex flex-1 justify-end">
         <button
