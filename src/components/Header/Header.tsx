@@ -46,7 +46,7 @@ export default function Header() {
 
   return (
     <>
-      <nav className="md:bg-transparent bg-brown-50 border-b border-brown-400">
+      <nav className="md:bg-transparent border-b border-brown-400">
         <div className="px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             <div className="flex items-center">
@@ -94,7 +94,7 @@ export default function Header() {
             </div>
           </div>
         </div>
-        <div className="md:hidden fixed bottom-0 w-full">
+        <div className="md:hidden bg-brown-50 fixed bottom-0 w-full">
           <div className="border-t border-brown-600 flex flex-row items-center justify-around px-2 py-3 sm:px-3">
             {links.map((button: IHeaderButtonType) => (
               <div
