@@ -1,7 +1,7 @@
 'use client'
 
 import logo from '@/src/assets/images/logo/Logo.svg'
-import Banner from '@/src/components/Banner/Banner'
+import Banner from '@/src/components/Header/AdvertismentBannerHeader'
 import Image from 'next/image'
 import Link from 'next/link'
 import clsx from 'clsx'

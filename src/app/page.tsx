@@ -2,7 +2,7 @@ import { BiSearch } from 'react-icons/bi'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Librairy | Home',
+  title: 'Librairy | Главная',
   description: 'The main page of Librairy website'
 }
 
