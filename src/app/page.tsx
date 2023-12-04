@@ -1,4 +1,10 @@
 import { BiSearch } from 'react-icons/bi'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: 'Librairy | Home',
+  description: 'The main page of Librairy website'
+}
 
 export default function Page() {
   return (

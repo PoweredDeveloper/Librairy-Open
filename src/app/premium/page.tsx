@@ -1,4 +1,5 @@
 import PaidPlanCard from '@/src/components/Presets/paidPlanCard/paidPlanCard'
+import { v4 as uuidv4 } from 'uuid'
 
 const cards = [
   {
@@ -56,6 +57,7 @@ export default function Example() {
             includedFeatures={card.includedFeatures}
             priceTitle={card.priceTitle}
             price={card.price}
+            key={uuidv4()}
           />
         ))}
       </div>
