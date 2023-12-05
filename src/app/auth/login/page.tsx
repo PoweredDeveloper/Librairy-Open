@@ -1,7 +1,28 @@
+'use client'
+
 import Image from 'next/image'
 import logo from '@/src/assets/images/logo/Logo.svg'
+import React from "react";
+import signUp from "@/src/lib/firebase/auth/signup";
+import { useRouter } from 'next/navigation'
 
-export default function Example() {
+export default function Login() {
+  const [email, setEmail] = React.useState('')
+  const [password, setPassword] = React.useState('')
+  const router = useRouter()
+
+  const handleForm = async (event) => {
+      event.preventDefault()
+
+      const { result, error } = await signUp(email, password);
+
+      if (error) {
+          return console.log(error)
+      }
+
+      console.log(result)
+      return router.push("/admin")
+  }
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -17,7 +38,7 @@ export default function Example() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <form className="space-y-6" onSubmit={handleForm} method="POST">
             <div>
               <label
                 htmlFor="email"
@@ -31,6 +52,7 @@ export default function Example() {
                   name="email"
                   type="email"
                   autoComplete="email"
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                   className="transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
                 />
@@ -60,6 +82,7 @@ export default function Example() {
                   name="password"
                   type="password"
                   autoComplete="current-password"
+                  onChange={(e) => setPassword(e.target.value)}
                   required
                   className="transition-colors outline-none block w-full ring-1 ring-inset rounded-md border-0 p-2 text-brown-900 shadow-sm ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
                 />
@@ -90,7 +113,7 @@ export default function Example() {
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
                 >
-                  <g clip-path="url(#clip0)">
+                  <g clipPath="url(#clip0)">
                     <path
                       d="M21.9892 12.1871C21.9892 11.3677 21.9246 10.7697 21.7847 10.1497H12.6885V13.848H18.0277C17.9201 14.767 17.3388 16.1512 16.047 17.0812L16.0289 17.205L18.905 19.4969L19.1042 19.5173C20.9342 17.7789 21.9892 15.221 21.9892 12.1871Z"
                       fill="#4285F4"
@@ -129,7 +152,7 @@ export default function Example() {
           <p className="mt-10 text-center text-sm text-brown-500">
             Не читатель?{' '}
             <a
-              href="#"
+              href="/auth/signup"
               className="transition-colors font-semibold leading-6 text-orange-500 hover:text-orange-600"
             >
               Зарегестрироваться
