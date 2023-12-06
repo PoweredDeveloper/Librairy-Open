@@ -15,7 +15,7 @@ export default function AuthForm() {
       theme="dark"
       showLinks={false}
       providers={['google']}
-      redirectTo="http://localhost:3000/auth/callback"
+      redirectTo="http://librairy.vercel.app/auth/callback"
     />
   )
 }
