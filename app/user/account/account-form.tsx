@@ -23,6 +23,10 @@ export default function AccountForm({ session }: Props) {
     try {
       setLoading(true)
 
+      if (!user) {
+        throw new Error('User is not defined!')
+      }
+
       const { data, error, status } = await supabase
         .from('profiles')
         .select(`full_name, username, website, avatar_url`)
