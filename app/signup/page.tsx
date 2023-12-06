@@ -1,16 +1,8 @@
 'use client'
 import { Database } from '@/types/supabase'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import {
-  EventHandler,
-  FormEvent,
-  InputHTMLAttributes,
-  ReactEventHandler,
-  useState
-} from 'react'
 
 export default function AuthForm() {
-  const [formData, setFormData] = useState({})
   const supabase = createClientComponentClient<Database>()
 
   function checkFormData(
