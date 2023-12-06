@@ -2,7 +2,7 @@ import '@/app/css/global.css'
 import Header from '@/app/components/Header/Header'
 import { Inter } from 'next/font/google'
 
-const inter = Inter({ weight: ['400'], subsets: ['cyrillic', 'latin'] })
+const inter = Inter({ weight: ['300'], subsets: ['cyrillic', 'latin'] })
 
 export default function RootLayout({
   children
@@ -10,7 +10,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="ru" className={`${inter.className} font-sans`}>
+    <html lang="ru" className={`${inter.className}`}>
       <head>
         <meta httpEquiv="Content-Type" content="text/html;charset=UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
