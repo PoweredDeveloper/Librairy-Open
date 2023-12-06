@@ -1,17 +1,14 @@
 'use client'
 import { useCallback, useEffect, useState } from 'react'
-import { Database } from '@/types/supabase'
-import {
-  Session,
-  createClientComponentClient
-} from '@supabase/auth-helpers-nextjs'
+import { Session } from '@supabase/auth-helpers-nextjs'
+import supabaseServer from '@/app/api/supabase/supabaseServer'
 
 type Props = {
   session: Session | null
 }
 
 export default function AccountForm({ session }: Props) {
-  const supabase = createClientComponentClient<Database>()
+  const supabase = supabaseServer()
   const [loading, setLoading] = useState(true)
   const [fullname, setFullname] = useState<string | null>(null)
   const [username, setUsername] = useState<string | null>(null)
