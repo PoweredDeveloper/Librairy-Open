@@ -178,7 +178,7 @@ export default function Header() {
               href="/signup"
               className="text-sm font-semibold leading-6 text-brown-900"
             >
-              Войти <span aria-hidden="true">&rarr;</span>
+              Зарегестрироваться <span aria-hidden="true">&rarr;</span>
             </Link>
           </div>
         </nav>
@@ -192,7 +192,7 @@ export default function Header() {
           <Dialog.Panel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-brown-900/10">
             <div className="flex items-center justify-between">
               <Link href="#" className="-m-1.5 p-1.5">
-                <span className="sr-only">Your Company</span>
+                <span className="sr-only">Librairy</span>
                 <Image className="h-8 w-auto" src={logo} alt="" />
               </Link>
               <button
@@ -236,22 +236,22 @@ export default function Header() {
                     )}
                   </Disclosure>
                   <Link
-                    href="#"
+                    href="/collections"
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-brown-900 hover:bg-brown-50"
                   >
-                    Features
+                    Collections
                   </Link>
                   <Link
-                    href="#"
+                    href="/trending"
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-brown-900 hover:bg-brown-50"
                   >
-                    Marketplace
+                    Trending
                   </Link>
                   <Link
-                    href="#"
+                    href="/premium"
                     className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-brown-900 hover:bg-brown-50"
                   >
-                    Company
+                    Premium
                   </Link>
                 </div>
                 <div className="py-6">
