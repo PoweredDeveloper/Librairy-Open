@@ -1,9 +1,11 @@
+'use client'
 import { Auth } from '@supabase/auth-ui-react'
 import { ThemeSupa } from '@supabase/auth-ui-shared'
-import supabaseServer from '../api/supabase/supabaseServer'
+import { Database } from '@/types/supabase'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export default function AuthForm() {
-  const supabase = supabaseServer()
+  const supabase = createClientComponentClient<Database>()
 
   return (
     <Auth
