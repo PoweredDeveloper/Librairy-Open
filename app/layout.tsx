@@ -2,7 +2,7 @@ import '@/app/css/global.css'
 import Header from '@/app/components/Header/Header'
 import { Inter } from 'next/font/google'
 
-const inter = Inter({ weight: ['400'] })
+const inter = Inter({ weight: ['400'], subsets: ['cyrillic', 'latin'] })
 
 export default function RootLayout({
   children
