@@ -1,4 +1,4 @@
-'use client'
+'use server'
 import { useCallback, useEffect, useState } from 'react'
 import { Session } from '@supabase/auth-helpers-nextjs'
 import supabaseServer from '@/app/api/supabase/supabaseServer'
