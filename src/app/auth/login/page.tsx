@@ -1,4 +1,3 @@
-import React from 'react'
 import Link from 'next/link'
 
 export default function Login() {
@@ -22,11 +21,11 @@ export default function Login() {
           autoComplete="current-password"
           required
         />
-        <button type="submit">Войти</button>
+        <button>Войти</button>
         <button>G | Продолжить через Google</button>
       </form>
       <p>
-        Не читатель? <Link href="/auth/signup">Зарегестрироваться</Link>
+        Не читатель? <Link href="#">Зарегестрироваться</Link>
       </p>
     </>
   )

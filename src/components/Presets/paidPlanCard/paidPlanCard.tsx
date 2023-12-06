@@ -17,8 +17,8 @@ export default function PaidPlanCard({
 }: PaidPlanCardProps) {
   return (
     <>
-      {title},{description},{includedFeatures.map((feature) => ({ feature }))},
-      {priceTitle}₽{price}
+      {title}, {description}, {includedFeatures.map((feature) => feature)},
+      {priceTitle}, ₽{price}
     </>
   )
 }
