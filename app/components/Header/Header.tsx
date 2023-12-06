@@ -1,6 +1,6 @@
 'use client'
 
-import Banner from '@/src/components/Header/AdvertismentBannerHeader'
+import Banner from '@/app/components/Header/AdvertismentBannerHeader'
 import Link from 'next/link'
 import { v4 as uuidv4 } from 'uuid'
 

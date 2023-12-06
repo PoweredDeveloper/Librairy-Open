@@ -1,0 +1,3 @@
+[auth.email.template.confirmation]
+subject = "Нажмите для подтверждения вашей почты: "
+content_path = "./supabase/templates/invite.html"
