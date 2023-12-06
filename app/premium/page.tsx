@@ -48,17 +48,19 @@ const cards = [
 
 export default function Premium() {
   return (
-    <>
-      {cards.map((card) => (
-        <PaidPlanCard
-          title={card.title}
-          description={card.description}
-          includedFeatures={card.includedFeatures}
-          priceTitle={card.priceTitle}
-          price={card.price}
-          key={uuidv4()}
-        />
-      ))}
-    </>
+    <div className="bg-white py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+        {cards.map((card) => (
+          <PaidPlanCard
+            title={card.title}
+            description={card.description}
+            includedFeatures={card.includedFeatures}
+            priceTitle={card.priceTitle}
+            price={card.price}
+            key={uuidv4()}
+          />
+        ))}
+      </div>
+    </div>
   )
 }
