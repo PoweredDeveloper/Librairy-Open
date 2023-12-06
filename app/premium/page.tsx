@@ -1,4 +1,4 @@
-import PaidPlanCard from '@/src/components/Presets/paidPlanCard/paidPlanCard'
+import PaidPlanCard from '@/app/components/Presets/paidPlanCard/paidPlanCard'
 import { v4 as uuidv4 } from 'uuid'
 
 const cards = [
