@@ -22,8 +22,16 @@ export default function Avatar({
 
   useEffect(() => {
     async function downloadImage(path: string) {
-      if (path.includes('https://')) setAvatarUrl(path)
-      else {
+      if (path.includes('https://')) {
+        try {
+          const response = await fetch(path)
+          const blobImage = await response.blob()
+          const url = URL.createObjectURL(blobImage)
+          setAvatarUrl(url)
+        } catch (error) {
+          console.log('Error downloading image [google]: ', error)
+        }
+      } else {
         try {
           const { data, error } = await supabase.storage
             .from('avatars')
