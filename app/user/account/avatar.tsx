@@ -22,22 +22,25 @@ export default function Avatar({
 
   useEffect(() => {
     async function downloadImage(path: string) {
-      try {
-        const { data, error } = await supabase.storage
-          .from('avatars')
-          .download(path)
-        if (error) {
-          throw error
+      if (path.includes('https://')) setAvatarUrl(path)
+      else {
+        try {
+          const { data, error } = await supabase.storage
+            .from('avatars')
+            .download(path)
+          if (error) {
+            throw error
+          }
+
+          const url = URL.createObjectURL(data)
+          setAvatarUrl(url)
+        } catch (error) {
+          console.log('Error downloading image: ', error)
         }
-
-        const url = URL.createObjectURL(data)
-        setAvatarUrl(url)
-      } catch (error) {
-        console.log('Error downloading image: ', error)
       }
-    }
 
-    if (url) downloadImage(url)
+      if (url) downloadImage(url)
+    }
   }, [url, supabase])
 
   const uploadAvatar: React.ChangeEventHandler<HTMLInputElement> = async (
