@@ -1,6 +1,6 @@
 import supabaseServer from '@/app/api/supabase/supabaseServer'
 import Link from 'next/link'
-import { NextResponse } from 'next/server'
+import { redirect } from 'next/navigation'
 
 export default async function EmailConfirmedPage() {
   const supabase = supabaseServer()
@@ -9,7 +9,7 @@ export default async function EmailConfirmedPage() {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return NextResponse.redirect(new URL('https://librairy.vercel.app/'))
+    redirect('/')
   }
 
   return (
