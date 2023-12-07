@@ -15,21 +15,22 @@ export default async function EmailConfirmedPage() {
   return (
     <div className="flex items-center justify-center mt-6 w-full">
       <div className="bg-brown-50 border border-brown-500 rounded-xl h-2/3 text-brown-900 p-6">
-        <h2 className="text-xl w-full text-center">Ваша почта подтверждена!</h2>
+        <h2 className="text-xl w-full text-center">
+          Вы были успешно зарегестрированы!
+        </h2>
         <p className="text-brown-700">
-          Ваша почта была успешно подтверждена и теперь вы можете вернуться на
-          сайт и войти в свой аккаунт
+          Теперь вы можете вернуться на сайт и войти в свой аккаунт
         </p>
-        <div className="flex items-center justify-around mt-3">
+        <div className="flex items-center gap-3 justify-around mt-3">
           <Link
             href="/signin"
-            className="rounded-md py-2 px-3 bg-orange-500 hover:bg-orange-600 transition-colors text-white w-1/2"
+            className="text-center rounded-md py-2 px-3 bg-orange-500 hover:bg-orange-600 transition-colors text-white w-1/2"
           >
             Вход
           </Link>
           <Link
             href="/"
-            className="rounded-md py-2 px-3 bg-brown-200 hover:bg-brown-300 w-1/2"
+            className="text-center rounded-md py-2 px-3 bg-brown-200 hover:bg-brown-300 w-1/2"
           >
             На Главную
           </Link>

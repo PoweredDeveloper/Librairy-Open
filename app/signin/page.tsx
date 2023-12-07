@@ -12,7 +12,7 @@ export default function AuthForm() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'https://librairy.vercel.app/'
+        redirectTo: 'https://librairy.vercel.app/auth/callback'
       }
     })
   }
