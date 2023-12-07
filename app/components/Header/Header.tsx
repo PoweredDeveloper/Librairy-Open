@@ -2,13 +2,15 @@
 
 import logo from '@/app/assets/images/logo/Logo.svg'
 import Banner from '@/app/components/Header/AdvertismentBannerHeader'
+import { Session, User } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
+import { clsx } from 'clsx'
 import { Fragment, useState, ReactElement } from 'react'
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import { v4 as uuidv4 } from 'uuid'
 import { usePathname } from 'next/navigation'
-import { BiTrendingUp, BiHome, BiUserCircle, BiSearch } from 'react-icons/bi'
+import { BiTrendingUp, BiHome, BiUserCircle } from 'react-icons/bi'
 import { FaAd, FaBars, FaChevronDown } from 'react-icons/fa'
 import { IoLibraryOutline } from 'react-icons/io5'
 import { MdOutlineCollectionsBookmark } from 'react-icons/md'
@@ -86,7 +88,11 @@ function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Header() {
+type Props = {
+  user: User | null
+}
+
+export default function Header({ user }: Props) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
 
@@ -173,10 +179,15 @@ export default function Header() {
               </Transition>
             </Popover>
           </Popover.Group>
-          <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          <div
+            className={clsx('lg:flex lg:flex-1 lg:justify-end', {
+              hidden: user,
+              block: !user
+            })}
+          >
             <Link
               href="/signup"
-              className="text-sm font-semibold leading-6 text-brown-900"
+              className="text-sm font-semibold leading-6 text-brown-900 mr-2"
             >
               Зарегестрироваться <span aria-hidden="true">&rarr;</span>
             </Link>
@@ -185,6 +196,16 @@ export default function Header() {
               className="text-sm font-semibold leading-6 text-brown-900"
             >
               Войти
+            </Link>
+          </div>
+          <div
+            className={clsx('lg:flex lg:flex-1 lg:justify-end', {
+              hidden: !user,
+              block: user
+            })}
+          >
+            <Link href="/user/account">
+              <BiUserCircle className="text-xl" />
             </Link>
           </div>
         </nav>
