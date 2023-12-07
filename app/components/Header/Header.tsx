@@ -113,7 +113,7 @@ export default function Header({ user }: Props) {
               </Link>
             ))}
             <Popover className="relative">
-              <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 outline-none text-brown-900">
+              <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 outline-none text-brown-900 underline-button">
                 Инструменты
                 <FaChevronDown
                   className="h-5 w-5 flex-none text-brown-400"

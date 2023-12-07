@@ -21,7 +21,7 @@ export default function AuthForm() {
       return false
     if (!/^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/.test(password))
       return false
-    if (password.length <= 6) return false
+    if (password.length < 6) return false
     if (password != rePassword) return false
     return true
   }
