@@ -3,13 +3,13 @@ import { Database } from '@/types/supabase'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image'
 import logo from '@/app/assets/images/logo/Logo.svg'
+import Link from 'next/link'
 
 export default function AuthForm() {
   const supabase = createClientComponentClient<Database>()
 
   function checkFormData(
     email: string,
-    username: string,
     password: string,
     rePassword: string
   ): boolean {
@@ -21,17 +21,21 @@ export default function AuthForm() {
       return false
     if (!/^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/.test(password))
       return false
-    if (!/^[a-z_.-]{3,20}$/.test(username)) return false
     if (password.length <= 6) return false
     if (password != rePassword) return false
     return true
+  }
+
+  async function signInWithGoogle() {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google'
+    })
   }
 
   const signUpNewUser = async (event: any) => {
     if (
       !checkFormData(
         event.target.email.value,
-        event.target.username.value,
         event.target.password.value,
         event.target.repassword.value
       )
@@ -42,10 +46,7 @@ export default function AuthForm() {
       email: event.target.email.value,
       password: event.target.password.value,
       options: {
-        emailRedirectTo: 'https://librairy.vercel.app/auth/callback',
-        data: {
-          username: event.target.username.value
-        }
+        emailRedirectTo: 'https://librairy.vercel.app/auth/callback'
       }
     })
   }
@@ -80,25 +81,7 @@ export default function AuthForm() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium leading-6 text-brown-900"
-              >
-                Имя пользователя
-              </label>
-              <div className="mt-2">
-                <input
-                  id="username"
-                  name="username"
-                  type="text"
-                  required
-                  className="transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
+                  className="autofill:bg-brown-50 transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -119,7 +102,7 @@ export default function AuthForm() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="transition-colors outline-none block w-full ring-1 ring-inset rounded-md border-0 p-2 text-brown-900 shadow-sm ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
+                  className="autofill:bg-brown-50 transition-colors outline-none block w-full ring-1 ring-inset rounded-md border-0 p-2 text-brown-900 shadow-sm ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -140,7 +123,7 @@ export default function AuthForm() {
                   type="password"
                   autoComplete="current-password"
                   required
-                  className="transition-colors outline-none block w-full ring-1 ring-inset rounded-md border-0 p-2 text-brown-900 shadow-sm ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
+                  className="autofill:bg-brown-50 transition-colors outline-none block w-full ring-1 ring-inset rounded-md border-0 p-2 text-brown-900 shadow-sm ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
                 />
               </div>
             </div>
@@ -150,7 +133,7 @@ export default function AuthForm() {
                 type="submit"
                 className="transition-colors flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
               >
-                Войти
+                Зарегестрироваться
               </button>
             </div>
             <div className="flex items-center justify-center my-6">
@@ -161,7 +144,11 @@ export default function AuthForm() {
               <div className="border-b border-brown-400 w-1/2"></div>
             </div>
             <div>
-              <button className="w-full border rounded-lg border-brown-800 py-1.5 px-2 md:py-3 md:px-3 flex items-center mt-4 md:mt-7">
+              <button
+                type="button"
+                onClick={() => signInWithGoogle()}
+                className="w-full border rounded-lg border-brown-800 py-1.5 px-2 md:py-3 md:px-3 flex items-center mt-4 md:mt-7"
+              >
                 <svg
                   width="25"
                   height="24"
@@ -206,13 +193,13 @@ export default function AuthForm() {
           </form>
 
           <p className="mt-10 text-center text-sm text-brown-500">
-            Не читатель?{' '}
-            <a
-              href="/auth/signup"
+            Уже читатель?{' '}
+            <Link
+              href="/signin"
               className="transition-colors font-semibold leading-6 text-orange-500 hover:text-orange-600"
             >
-              Зарегестрироваться
-            </a>
+              Войти
+            </Link>
           </p>
         </div>
       </div>
