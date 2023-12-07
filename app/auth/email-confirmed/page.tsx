@@ -1,10 +1,9 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import supabaseServer from '@/app/api/supabase/supabaseServer'
 import Link from 'next/link'
 import { NextResponse } from 'next/server'
 
 export default async function EmailConfirmedPage() {
-  const res = NextResponse.next()
-  const supabase = createClientComponentClient()
+  const supabase = supabaseServer()
   const {
     data: { user }
   } = await supabase.auth.getUser()
