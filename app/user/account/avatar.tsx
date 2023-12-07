@@ -37,9 +37,8 @@ export default function Avatar({
         } catch (error) {
           console.log('Error downloading image: ', error)
         }
+        if (url) downloadImage(url)
       }
-
-      if (url) downloadImage(url)
     }
   }, [url, supabase])
 
