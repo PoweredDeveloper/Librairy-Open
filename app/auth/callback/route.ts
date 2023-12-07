@@ -12,5 +12,5 @@ export async function GET(req: NextRequest) {
     await supabase.auth.exchangeCodeForSession(code)
   }
 
-  return NextResponse.redirect(new URL('/user/account', req.url))
+  return NextResponse.redirect(new URL('/auth/email-confirmed', req.url))
 }
