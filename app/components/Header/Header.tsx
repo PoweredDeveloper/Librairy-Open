@@ -55,7 +55,7 @@ const products = [
   },
   {
     name: 'Сократить',
-    description: 'Кратко рассказывает о чем книга, глава, страница',
+    description: 'Кратко рассказывает о чем книга, глава',
     href: '#',
     icon: LuTextSelect
   },
@@ -106,14 +106,14 @@ export default function Header({ user }: Props) {
             {links.map((link: IHeaderButtonType) => (
               <Link
                 href={link.link}
-                className="text-sm font-semibold leading-6 text-brown-900 hover-button"
+                className="text-sm font-semibold leading-6 text-brown-900 underline-button"
                 key={uuidv4()}
               >
                 {link.title}
               </Link>
             ))}
             <Popover className="relative">
-              <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-brown-900">
+              <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 outline-none text-brown-900">
                 Инструменты
                 <FaChevronDown
                   className="h-5 w-5 flex-none text-brown-400"
@@ -167,16 +167,10 @@ export default function Header({ user }: Props) {
               block: user == null
             })}
           >
-            <Link
-              href="/signup"
-              className="text-sm font-semibold leading-6 text-brown-900 mr-2 button accent-button"
-            >
+            <Link href="/signup" className="mr-2 button accent-button">
               Зарегестрироваться
             </Link>
-            <Link
-              href="/signin"
-              className="text-sm font-semibold leading-6 text-brown-900 button hover-button"
-            >
+            <Link href="/signin" className="button hover-button">
               Войти
             </Link>
           </div>
@@ -210,7 +204,7 @@ export default function Header({ user }: Props) {
                     {({ open }) => (
                       <>
                         <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-brown-900 hover:bg-brown-50">
-                          Product
+                          Инструменты
                           <FaChevronDown
                             className={classNames(
                               open ? 'rotate-180' : '',
