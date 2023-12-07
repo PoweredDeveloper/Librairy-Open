@@ -10,10 +10,14 @@ import { Fragment, useState, ReactElement } from 'react'
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import { v4 as uuidv4 } from 'uuid'
 import { usePathname } from 'next/navigation'
-import { BiTrendingUp, BiHome, BiUserCircle } from 'react-icons/bi'
+import { BiTrendingUp, BiHome, BiUserCircle, BiScan } from 'react-icons/bi'
 import { FaAd, FaBars, FaChevronDown } from 'react-icons/fa'
+import { LuTextSelect } from 'react-icons/lu'
 import { IoLibraryOutline } from 'react-icons/io5'
-import { MdOutlineCollectionsBookmark } from 'react-icons/md'
+import {
+  MdOutlineCollectionsBookmark,
+  MdOutlineTranslate
+} from 'react-icons/md'
 import {
   FaChartArea,
   FaCube,
@@ -39,49 +43,27 @@ const links: Array<IHeaderButtonType> = [
     title: 'Коллекции',
     icon: <MdOutlineCollectionsBookmark />,
     link: '/collections'
-  },
-  {
-    title: 'Восходящее',
-    icon: <BiTrendingUp />,
-    link: '/trending'
-  },
-  {
-    title: 'Account',
-    icon: <BiUserCircle />,
-    link: '/user/account'
   }
 ]
 
 const products = [
   {
-    name: 'Analytics',
-    description: 'Get a better understanding of your traffic',
+    name: 'Перевести',
+    description: 'Переводит книгу на любой из 6-ти языков!',
     href: '#',
-    icon: FaChartArea
+    icon: MdOutlineTranslate
   },
   {
-    name: 'Engagement',
-    description: 'Speak directly to your customers',
+    name: 'Сократить',
+    description: 'Кратко рассказывает о чем книга, глава, страница',
     href: '#',
-    icon: FaCube
+    icon: LuTextSelect
   },
   {
-    name: 'Security',
-    description: 'Your customers’ data will be safe and secure',
+    name: 'Сканировать',
+    description: 'Переводит из фото в текст с помощью OCR',
     href: '#',
-    icon: FaFingerprint
-  },
-  {
-    name: 'Integrations',
-    description: 'Connect with third-party tools',
-    href: '#',
-    icon: FaSquareCheck
-  },
-  {
-    name: 'Automations',
-    description: 'Build strategic funnels that will convert',
-    href: '#',
-    icon: FaAd
+    icon: BiScan
   }
 ]
 
@@ -124,7 +106,7 @@ export default function Header({ user }: Props) {
             {links.map((link: IHeaderButtonType) => (
               <Link
                 href={link.link}
-                className="text-sm font-semibold leading-6 text-brown-900"
+                className="text-sm font-semibold leading-6 text-brown-900 hover-button"
                 key={uuidv4()}
               >
                 {link.title}
@@ -132,7 +114,7 @@ export default function Header({ user }: Props) {
             ))}
             <Popover className="relative">
               <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 text-brown-900">
-                Продукт
+                Инструменты
                 <FaChevronDown
                   className="h-5 w-5 flex-none text-brown-400"
                   aria-hidden="true"
@@ -187,13 +169,13 @@ export default function Header({ user }: Props) {
           >
             <Link
               href="/signup"
-              className="text-sm font-semibold leading-6 text-brown-900 mr-2"
+              className="text-sm font-semibold leading-6 text-brown-900 mr-2 button accent-button"
             >
-              Зарегестрироваться <span aria-hidden="true">&rarr;</span>
+              Зарегестрироваться
             </Link>
             <Link
               href="/signin"
-              className="text-sm font-semibold leading-6 text-brown-900"
+              className="text-sm font-semibold leading-6 text-brown-900 button hover-button"
             >
               Войти
             </Link>
@@ -273,7 +255,7 @@ export default function Header({ user }: Props) {
                   </Link>
                   <Link
                     onClick={() => setMobileMenuOpen(false)}
-                    href="/login"
+                    href="/signin"
                     className="transition-colors -mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-brown-900 bg-brown-50 hover:bg-brown-100 w-1/2 text-center"
                   >
                     Вход
