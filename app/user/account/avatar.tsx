@@ -24,7 +24,7 @@ export default function Avatar({
     async function downloadImage(path: string) {
       if (path.includes('https://')) {
         try {
-          const response = await fetch(path)
+          const response = await fetch(path.replace('s96-c', 's512-c'))
           const blobImage = await response.blob()
           const url = URL.createObjectURL(blobImage)
           setAvatarUrl(url)
