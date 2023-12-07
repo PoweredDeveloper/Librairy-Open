@@ -8,7 +8,7 @@ import {
 } from '@supabase/auth-helpers-nextjs'
 
 type Props = {
-  session: Session
+  session: Session | null
 }
 
 export default function AccountForm({ session }: Props) {
@@ -88,7 +88,7 @@ export default function AccountForm({ session }: Props) {
   return (
     <div className="form-widget">
       <Avatar
-        uid={user?.id}
+        uid={user ? user?.id : ''}
         url={avatar_url}
         size={150}
         onUpload={(url) => {
