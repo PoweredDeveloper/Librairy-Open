@@ -12,7 +12,7 @@ export default function AuthForm() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'https://librairy.vercel.app/user/account'
+        redirectTo: 'https://librairy.vercel.app/'
       }
     })
   }
@@ -68,6 +68,14 @@ export default function AuthForm() {
                 >
                   Пароль
                 </label>
+                <div className="text-sm">
+                  <a
+                    href="#"
+                    className="transition-colors text-orange-500 hover:text-orange-600"
+                  >
+                    Забыли пароль?
+                  </a>
+                </div>
               </div>
               <div className="mt-2">
                 <input

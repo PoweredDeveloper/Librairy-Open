@@ -26,28 +26,29 @@ interface IHeaderButtonType {
   title: string
   icon: ReactElement<any, any>
   link: string
-  mobileOnly: boolean
 }
 
 const links: Array<IHeaderButtonType> = [
-  { title: 'Главная', icon: <BiHome />, link: '/', mobileOnly: false },
+  { title: 'Главная', icon: <BiHome />, link: '/' },
   {
     title: 'Библиотека',
     icon: <IoLibraryOutline />,
-    link: '/library',
-    mobileOnly: false
+    link: '/library'
   },
   {
     title: 'Коллекции',
     icon: <MdOutlineCollectionsBookmark />,
-    link: '/collections',
-    mobileOnly: false
+    link: '/collections'
   },
   {
     title: 'Восходящее',
     icon: <BiTrendingUp />,
-    link: '/trending',
-    mobileOnly: false
+    link: '/trending'
+  },
+  {
+    title: 'Account',
+    icon: <BiUserCircle />,
+    link: '/user/account'
   }
 ]
 

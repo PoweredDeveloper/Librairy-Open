@@ -13,7 +13,7 @@ export default async function EmailConfirmedPage() {
   }
 
   return (
-    <div className="flex items-center justify-center mt-6 w-full h-screen">
+    <div className="flex items-center justify-center mt-6 w-full">
       <div className="bg-brown-50 border border-brown-500 rounded-xl h-2/3 text-brown-900 p-6">
         <h2 className="text-xl w-full text-center">Ваша почта подтверждена!</h2>
         <p className="text-brown-700">
