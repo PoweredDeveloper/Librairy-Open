@@ -8,49 +8,20 @@ import Link from 'next/link'
 export default function AuthForm() {
   const supabase = createClientComponentClient<Database>()
 
-  function checkFormData(
-    email: string,
-    password: string,
-    rePassword: string
-  ): boolean {
-    if (
-      !/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/.test(
-        email
-      )
-    )
-      return false
-    if (!/^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/.test(password))
-      return false
-    if (password.length <= 6) return false
-    if (password != rePassword) return false
-    return true
-  }
-
   async function signInWithGoogle() {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: 'https://librairy.vercel.app/auth/callback'
+        redirectTo: 'https://librairy.vercel.app/'
       }
     })
   }
 
-  const signUpNewUser = async (event: any) => {
-    if (
-      !checkFormData(
-        event.target.email.value,
-        event.target.password.value,
-        event.target.repassword.value
-      )
-    )
-      return
+  const signInUser = async (event: any) => {
     event.preventDefault()
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: event.target.email.value,
-      password: event.target.password.value,
-      options: {
-        emailRedirectTo: 'https://librairy.vercel.app/auth/callback'
-      }
+      password: event.target.password.value
     })
   }
 
@@ -64,12 +35,12 @@ export default function AuthForm() {
             alt="Librairy Logo"
           />
           <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-brown-900">
-            Регистрация аккаунта
+            Вход в аккаунт
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={signUpNewUser} method="POST">
+          <form className="space-y-6" onSubmit={signInUser} method="POST">
             <div>
               <label
                 htmlFor="email"
@@ -111,32 +82,11 @@ export default function AuthForm() {
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-brown-900"
-                >
-                  Повторите пароль
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="repassword"
-                  name="repassword"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  className="autofill:bg-brown-50 transition-colors outline-none block w-full ring-1 ring-inset rounded-md border-0 p-2 text-brown-900 shadow-sm ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div>
               <button
                 type="submit"
                 className="transition-colors flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
               >
-                Зарегестрироваться
+                Войти
               </button>
             </div>
             <div className="flex items-center justify-center my-6">
@@ -196,12 +146,12 @@ export default function AuthForm() {
           </form>
 
           <p className="mt-10 text-center text-sm text-brown-500">
-            Уже читатель?{' '}
+            Не читатель?{' '}
             <Link
-              href="/signin"
+              href="/signup"
               className="transition-colors font-semibold leading-6 text-orange-500 hover:text-orange-600"
             >
-              Войти
+              Зарегестрироваться
             </Link>
           </p>
         </div>

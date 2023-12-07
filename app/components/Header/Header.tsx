@@ -180,6 +180,12 @@ export default function Header() {
             >
               Зарегестрироваться <span aria-hidden="true">&rarr;</span>
             </Link>
+            <Link
+              href="/signin"
+              className="text-sm font-semibold leading-6 text-brown-900"
+            >
+              Войти
+            </Link>
           </div>
         </nav>
         <Dialog
@@ -235,31 +241,31 @@ export default function Header() {
                       </>
                     )}
                   </Disclosure>
-                  <Link
-                    href="/collections"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-brown-900 hover:bg-brown-50"
-                  >
-                    Collections
-                  </Link>
-                  <Link
-                    href="/trending"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-brown-900 hover:bg-brown-50"
-                  >
-                    Trending
-                  </Link>
-                  <Link
-                    href="/premium"
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-brown-900 hover:bg-brown-50"
-                  >
-                    Premium
-                  </Link>
+                  {links.map((link: IHeaderButtonType) => (
+                    <Link
+                      onClick={() => setMobileMenuOpen(false)}
+                      href={link.link}
+                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-brown-900 hover:bg-brown-50"
+                      key={uuidv4()}
+                    >
+                      {link.title}
+                    </Link>
+                  ))}
                 </div>
-                <div className="py-6">
+                <div className="py-4 flex flex-row items-center justify-around gap-3">
                   <Link
+                    onClick={() => setMobileMenuOpen(false)}
                     href="/signup"
-                    className="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-brown-900 hover:bg-brown-50"
+                    className="transition-colors -mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-white hover:bg-orange-500 bg-orange-400 w-1/2 text-center"
                   >
-                    Sign Up
+                    Регистрация
+                  </Link>
+                  <Link
+                    onClick={() => setMobileMenuOpen(false)}
+                    href="/login"
+                    className="transition-colors -mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-brown-900 bg-brown-50 hover:bg-brown-100 w-1/2 text-center"
+                  >
+                    Вход
                   </Link>
                 </div>
               </div>
