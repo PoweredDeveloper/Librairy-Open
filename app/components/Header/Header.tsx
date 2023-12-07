@@ -180,9 +180,8 @@ export default function Header({ user }: Props) {
             </Popover>
           </Popover.Group>
           <div
-            className={clsx('lg:flex lg:flex-1 lg:justify-end', {
-              hidden: user,
-              block: !user
+            className={clsx('hidden lg:flex lg:flex-1 lg:justify-end', {
+              block: user == null
             })}
           >
             <Link
@@ -196,16 +195,6 @@ export default function Header({ user }: Props) {
               className="text-sm font-semibold leading-6 text-brown-900"
             >
               Войти
-            </Link>
-          </div>
-          <div
-            className={clsx('lg:flex lg:flex-1 lg:justify-end', {
-              hidden: !user,
-              block: user
-            })}
-          >
-            <Link href="/user/account">
-              <BiUserCircle className="text-xl" />
             </Link>
           </div>
         </nav>
