@@ -10,7 +10,7 @@ export default async function EmailConfirmedPage() {
   } = await supabase.auth.getUser()
 
   if (!user) {
-    return NextResponse.redirect(new URL('/'))
+    return NextResponse.redirect(new URL('https://librairy.vercel.app/'))
   }
 
   return (
