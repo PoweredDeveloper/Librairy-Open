@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Database } from '@/types/supabase'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image'
+import downloadUserProfileImage from '@/app/utils/user/downloadUserProfileImageClient'
 type Profiles = Database['public']['Tables']['profiles']['Row']
 
 export default function Avatar({
@@ -21,33 +22,10 @@ export default function Avatar({
   const [uploading, setUploading] = useState(false)
 
   useEffect(() => {
-    async function downloadImage(path: string) {
-      if (path.includes('https://')) {
-        try {
-          const response = await fetch(path.replace('s96-c', 's512-c'))
-          const blobImage = await response.blob()
-          const url = URL.createObjectURL(blobImage)
-          setAvatarUrl(url)
-        } catch (error) {
-          console.log('Error downloading image [google]: ', error)
-        }
-      } else {
-        try {
-          const { data, error } = await supabase.storage
-            .from('avatars')
-            .download(path)
-          if (error) {
-            throw error
-          }
-
-          const url = URL.createObjectURL(data)
-          setAvatarUrl(url)
-        } catch (error) {
-          console.log('Error downloading image: ', error)
-        }
-      }
-    }
-    if (url) downloadImage(url)
+    if (url)
+      downloadUserProfileImage(url).then((result) =>
+        setAvatarUrl(result == undefined ? null : result)
+      )
   }, [url, supabase])
 
   const uploadAvatar: React.ChangeEventHandler<HTMLInputElement> = async (

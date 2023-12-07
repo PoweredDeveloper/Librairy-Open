@@ -2,51 +2,62 @@
 
 import logo from '@/app/assets/images/logo/Logo.svg'
 import Banner from '@/app/components/Header/AdvertismentBannerHeader'
-import { Session, User } from '@supabase/auth-helpers-nextjs'
+import {
+  User,
+  createClientComponentClient
+} from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image'
 import Link from 'next/link'
-import { clsx } from 'clsx'
-import { Fragment, useState, ReactElement } from 'react'
+import { Fragment, useCallback, useState, useEffect } from 'react'
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 import { v4 as uuidv4 } from 'uuid'
 import { usePathname } from 'next/navigation'
-import { BiTrendingUp, BiHome, BiUserCircle, BiScan } from 'react-icons/bi'
-import { FaAd, FaBars, FaChevronDown } from 'react-icons/fa'
+import { BiHome, BiUserCircle, BiScan } from 'react-icons/bi'
+import { FaBars, FaChevronDown } from 'react-icons/fa'
 import { LuTextSelect } from 'react-icons/lu'
 import { IoLibraryOutline } from 'react-icons/io5'
 import {
   MdOutlineCollectionsBookmark,
   MdOutlineTranslate
 } from 'react-icons/md'
-import {
-  FaChartArea,
-  FaCube,
-  FaFingerprint,
-  FaSquareCheck,
-  FaX
-} from 'react-icons/fa6'
+import { FaX } from 'react-icons/fa6'
+import { IconType } from 'react-icons'
+import React from 'react'
+import { Database } from '@/types/supabase'
+import downloadUserProfileImage from '@/app/utils/user/downloadUserProfileImageClient'
 
-interface IHeaderButtonType {
+type HeaderButtonType = {
   title: string
-  icon: ReactElement<any, any>
+  icon: IconType
   link: string
 }
 
-const links: Array<IHeaderButtonType> = [
-  { title: 'Главная', icon: <BiHome />, link: '/' },
+type HeaderButtonOptionsType = {
+  name: string
+  description: string
+  href: string
+  icon: IconType
+}
+
+type Props = {
+  user: User | null
+}
+
+const links: Array<HeaderButtonType> = [
+  { title: 'Главная', icon: BiHome, link: '/' },
   {
     title: 'Библиотека',
-    icon: <IoLibraryOutline />,
+    icon: IoLibraryOutline,
     link: '/library'
   },
   {
     title: 'Коллекции',
-    icon: <MdOutlineCollectionsBookmark />,
+    icon: MdOutlineCollectionsBookmark,
     link: '/collections'
   }
 ]
 
-const products = [
+const products: Array<HeaderButtonOptionsType> = [
   {
     name: 'Перевести',
     description: 'Переводит книгу на любой из 6-ти языков!',
@@ -71,13 +82,40 @@ function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-type Props = {
-  user: User | null
-}
-
 export default function Header({ user }: Props) {
+  const supabase = createClientComponentClient<Database>()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [avatarUrl, setAvatarUrl] = useState<string | null>()
   const pathname = usePathname()
+
+  const getProfile = useCallback(async () => {
+    try {
+      if (!user) {
+        throw new Error('User is not defined!')
+      }
+
+      const { data, error, status } = await supabase
+        .from('profiles')
+        .select(`full_name, username, website, avatar_url`)
+        .eq('id', user?.id)
+        .single()
+
+      if (data) {
+        setAvatarUrl(data.avatar_url)
+      }
+
+      if (error && status !== 406) {
+        throw error
+      }
+    } catch (error) {
+      alert(error)
+    }
+  }, [user, supabase])
+
+  useEffect(() => {
+    if (avatarUrl)
+      downloadUserProfileImage(avatarUrl).then((result) => setAvatarUrl(result))
+  }, [avatarUrl, supabase])
 
   return (
     <>
@@ -103,7 +141,7 @@ export default function Header({ user }: Props) {
             </button>
           </div>
           <Popover.Group className="hidden lg:flex lg:gap-x-12">
-            {links.map((link: IHeaderButtonType) => (
+            {links.map((link: HeaderButtonType) => (
               <Link
                 href={link.link}
                 className="text-sm font-semibold leading-6 text-brown-900 underline-button"
@@ -132,7 +170,7 @@ export default function Header({ user }: Props) {
               >
                 <Popover.Panel className="absolute -left-8 top-full z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-brown-900/5">
                   <div className="p-4">
-                    {products.map((item) => (
+                    {products.map((item: HeaderButtonOptionsType) => (
                       <div
                         key={item.name}
                         className="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm leading-6 hover:bg-brown-50"
@@ -163,9 +201,10 @@ export default function Header({ user }: Props) {
             </Popover>
           </Popover.Group>
           <div
-            className={clsx('hidden lg:flex lg:flex-1 lg:justify-end', {
-              block: user == null
-            })}
+            className={classNames(
+              'lg:flex lg:flex-1 lg:justify-end ml-2',
+              user != null ? 'hidden' : 'block'
+            )}
           >
             <Link href="/signup" className="mr-2 button accent-button">
               Зарегестрироваться
@@ -173,6 +212,18 @@ export default function Header({ user }: Props) {
             <Link href="/signin" className="button hover-button">
               Войти
             </Link>
+          </div>
+          <div
+            className={classNames(
+              'lg:flex lg:flex-1 lg:justify-end',
+              user != null ? 'block' : 'hidden'
+            )}
+          >
+            {avatarUrl ? (
+              <Image src={avatarUrl} alt="user avatar" />
+            ) : (
+              <BiUserCircle className="text-xl" />
+            )}
           </div>
         </nav>
         <Dialog
@@ -200,6 +251,17 @@ export default function Header({ user }: Props) {
             <div className="mt-6 flow-root">
               <div className="-my-6 divide-y divide-brown-500/10">
                 <div className="space-y-2 py-6">
+                  {links.map((link: HeaderButtonType) => (
+                    <Link
+                      onClick={() => setMobileMenuOpen(false)}
+                      href={link.link}
+                      className="-mx-3 rounded-lg px-3 py-2 flex flex-row items-center justify-start text-base font-semibold leading-7 text-brown-900 hover:bg-brown-50"
+                      key={uuidv4()}
+                    >
+                      <link.icon className="text-xl" />
+                      {link.title}
+                    </Link>
+                  ))}
                   <Disclosure as="div" className="-mx-3">
                     {({ open }) => (
                       <>
@@ -214,30 +276,23 @@ export default function Header({ user }: Props) {
                           />
                         </Disclosure.Button>
                         <Disclosure.Panel className="mt-2 space-y-2">
-                          {[...products].map((item) => (
-                            <Disclosure.Button
-                              key={item.name}
-                              as="a"
-                              href={item.href}
-                              className="block rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-brown-900 hover:bg-brown-50"
-                            >
-                              {item.name}
-                            </Disclosure.Button>
-                          ))}
+                          {[...products].map(
+                            (item: HeaderButtonOptionsType) => (
+                              <Disclosure.Button
+                                key={item.name}
+                                as="a"
+                                href={item.href}
+                                className="flex flex-row items-center justify-start rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-brown-900 hover:bg-brown-50"
+                              >
+                                <item.icon className="text-lg" />
+                                {item.name}
+                              </Disclosure.Button>
+                            )
+                          )}
                         </Disclosure.Panel>
                       </>
                     )}
                   </Disclosure>
-                  {links.map((link: IHeaderButtonType) => (
-                    <Link
-                      onClick={() => setMobileMenuOpen(false)}
-                      href={link.link}
-                      className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-brown-900 hover:bg-brown-50"
-                      key={uuidv4()}
-                    >
-                      {link.title}
-                    </Link>
-                  ))}
                 </div>
                 <div className="py-4 flex flex-row items-center justify-around gap-3">
                   <Link
