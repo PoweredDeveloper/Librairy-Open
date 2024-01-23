@@ -18,7 +18,7 @@ import Banner from '@/app/components/Header/AdvertismentBannerHeader'
 import { BiHome, BiUserCircle, BiScan } from 'react-icons/bi'
 import { FaBars, FaChevronDown } from 'react-icons/fa'
 import { IoLibraryOutline } from 'react-icons/io5'
-import { LuTextSelect } from 'react-icons/lu'
+import { LuTextSelect, LuShoppingCart } from 'react-icons/lu'
 import { RiToolsFill } from 'react-icons/ri'
 import { FaX } from 'react-icons/fa6'
 import {
@@ -80,7 +80,7 @@ function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Header({ user }: Props) {
+export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
 
@@ -169,14 +169,14 @@ export default function Header({ user }: Props) {
           </Popover.Group>
           <div
             className={classNames(
-              'hidden lg:flex lg:flex-1 lg:justify-end ml-2',
-              user != null ? 'hidden' : 'block'
+              'hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-2 ml-2',
+              // user != null ? 'hidden' : 'block'
             )}
           >
-            <Link href="/signup" className="mr-2 accent-button">
-              Зарегестрироваться
+            <Link href="/premium" className="button aspect- flex items-center justify-center relative">
+              <LuShoppingCart className="absolute left-0 right-0 ml-auto mr-auto" />
             </Link>
-            <Link href="/signin" className="button">
+            <Link href="/signin" className="accent-button">
               Войти
             </Link>
           </div>
