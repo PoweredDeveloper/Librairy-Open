@@ -23,7 +23,7 @@
     backdrop-filter: blur(10px);
   }
   .underline-button {
-    @apply relative cursor-pointer;
+    @apply relative cursor-pointer font-semibold;
   }
   .underline-button:after {
     @apply absolute w-full left-0 bg-brown-900 scale-x-0 rounded-full;
@@ -38,14 +38,15 @@
     transform-origin: bottom left;
   }
   .button {
-    @apply px-4 py-2 bg-transparent border border-white rounded-lg cursor-pointer;
+    @apply px-3 py-2.5 rounded-lg cursor-pointer border border-brown-500 text-brown-900 hover:bg-brown-100 bg-transparent text-sm font-semibold;
+    transition: 0.15s;
   }
   .hover-button {
     @apply hover:text-brown-600 hover:border-brown-100 cursor-pointer;
     transition: 0.15s;
   }
   .accent-button {
-    @apply rounded-full bg-orange-400 px-3.5 py-2.5 text-sm font-semibold text-white hover:bg-orange-500;
+    @apply button bg-orange-500 text-white border-orange-500 hover:border-orange-400 hover:bg-orange-400;
     transition: 0.15s;
   }
 }

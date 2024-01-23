@@ -1,46 +1,44 @@
 'use client'
 
-import logo from '@/app/assets/images/logo/Logo.svg'
-import Banner from '@/app/components/Header/AdvertismentBannerHeader'
-import {
-  User,
-  createClientComponentClient
-} from '@supabase/auth-helpers-nextjs'
-import Image from 'next/image'
-import Link from 'next/link'
+import React from 'react'
+import { v4 as uuidv4 } from 'uuid'
 import { Fragment, useCallback, useState, useEffect } from 'react'
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
-import { v4 as uuidv4 } from 'uuid'
+
+// Next js
+import Image from 'next/image'
+import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+
+// Components:
+import logo from '@/app/assets/images/logo/Logo.svg'
+import Banner from '@/app/components/Header/AdvertismentBannerHeader'
+
+// Icons:
 import { BiHome, BiUserCircle, BiScan } from 'react-icons/bi'
 import { FaBars, FaChevronDown } from 'react-icons/fa'
-import { LuTextSelect } from 'react-icons/lu'
 import { IoLibraryOutline } from 'react-icons/io5'
+import { LuTextSelect } from 'react-icons/lu'
+import { RiToolsFill } from 'react-icons/ri'
+import { FaX } from 'react-icons/fa6'
 import {
   MdOutlineCollectionsBookmark,
   MdOutlineTranslate
 } from 'react-icons/md'
-import { FaX } from 'react-icons/fa6'
+
 import { IconType } from 'react-icons'
-import React from 'react'
-import { Database } from '@/types/supabase'
-import downloadUserProfileImage from '@/app/utils/user/downloadUserProfileImageClient'
 
 type HeaderButtonType = {
-  title: string
-  icon: IconType
+  title: string,
+  icon: IconType,
   link: string
 }
 
 type HeaderButtonOptionsType = {
-  name: string
-  description: string
-  href: string
+  name: string,
+  description: string,
+  href: string,
   icon: IconType
-}
-
-type Props = {
-  user: User | null
 }
 
 const links: Array<HeaderButtonType> = [
@@ -83,45 +81,14 @@ function classNames(...classes: any[]) {
 }
 
 export default function Header({ user }: Props) {
-  const supabase = createClientComponentClient<Database>()
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [avatarUrl, setAvatarUrl] = useState<string | null>()
   const pathname = usePathname()
-
-  const getProfile = useCallback(async () => {
-    try {
-      if (!user) {
-        throw new Error('User is not defined!')
-      }
-
-      const { data, error, status } = await supabase
-        .from('profiles')
-        .select(`full_name, username, website, avatar_url`)
-        .eq('id', user?.id)
-        .single()
-
-      if (data) {
-        setAvatarUrl(data.avatar_url)
-      }
-
-      if (error && status !== 406) {
-        throw error
-      }
-    } catch (error) {
-      alert(error)
-    }
-  }, [user, supabase])
-
-  useEffect(() => {
-    if (avatarUrl)
-      downloadUserProfileImage(avatarUrl).then((result) => setAvatarUrl(result))
-  }, [avatarUrl, supabase])
 
   return (
     <>
       <header className="bg-white">
         <nav
-          className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
+          className="mx-auto flex max-w-12xl items-center justify-between p-6 lg:px-8"
           aria-label="Global"
         >
           <div className="flex lg:flex-1">
@@ -151,10 +118,10 @@ export default function Header({ user }: Props) {
               </Link>
             ))}
             <Popover className="relative">
-              <Popover.Button className="flex items-center gap-x-1 text-sm font-semibold leading-6 outline-none text-brown-900 underline-button">
+              <Popover.Button className="flex items-center gap-x-2 text-sm font-semibold leading-6 outline-none text-brown-900 underline-button">
                 Инструменты
                 <FaChevronDown
-                  className="h-5 w-5 flex-none text-brown-400"
+                  className="text-sm align-baseline flex-none text-brown-600"
                   aria-hidden="true"
                 />
               </Popover.Button>
@@ -177,19 +144,19 @@ export default function Header({ user }: Props) {
                       >
                         <div className="flex h-11 w-11 flex-none items-center justify-center rounded-lg bg-brown-50 group-hover:bg-white">
                           <item.icon
-                            className="h-6 w-6 text-brown-600 group-hover:text-orange-600"
+                            className="h-6 w-6 text-brown-900 group-hover:text-orange-600"
                             aria-hidden="true"
                           />
                         </div>
                         <div className="flex-auto">
                           <Link
                             href={item.href}
-                            className="block font-semibold text-brown-900"
+                            className="block font-semibold text-brown-800"
                           >
                             {item.name}
                             <span className="absolute inset-0" />
                           </Link>
-                          <p className="mt-1 text-brown-600">
+                          <p className="mt-1 text-brown-700">
                             {item.description}
                           </p>
                         </div>
@@ -202,28 +169,20 @@ export default function Header({ user }: Props) {
           </Popover.Group>
           <div
             className={classNames(
-              'lg:flex lg:flex-1 lg:justify-end ml-2',
+              'hidden lg:flex lg:flex-1 lg:justify-end ml-2',
               user != null ? 'hidden' : 'block'
             )}
           >
-            <Link href="/signup" className="mr-2 button accent-button">
+            <Link href="/signup" className="mr-2 accent-button">
               Зарегестрироваться
             </Link>
-            <Link href="/signin" className="button hover-button">
+            <Link href="/signin" className="button">
               Войти
             </Link>
           </div>
-          <div
-            className={classNames(
-              'lg:flex lg:flex-1 lg:justify-end',
-              user != null ? 'block' : 'hidden'
-            )}
-          >
-            {avatarUrl ? (
-              <Image src={avatarUrl} alt="user avatar" />
-            ) : (
-              <BiUserCircle className="text-xl" />
-            )}
+          <div className={classNames('hidden')}>
+            {/* TODO: CHANGE HIDDEN TO AVATAR */}
+            <BiUserCircle className="text-xl" />
           </div>
         </nav>
         <Dialog
@@ -255,7 +214,7 @@ export default function Header({ user }: Props) {
                     <Link
                       onClick={() => setMobileMenuOpen(false)}
                       href={link.link}
-                      className="-mx-3 rounded-lg px-3 py-2 flex flex-row items-center justify-start text-base font-semibold leading-7 text-brown-900 hover:bg-brown-50"
+                      className="-mx-3 rounded-lg gap-x-2 px-3 py-2 flex flex-row items-center justify-start text-base font-semibold leading-7 text-brown-900 hover:bg-brown-50"
                       key={uuidv4()}
                     >
                       <link.icon className="text-xl" />
@@ -266,11 +225,14 @@ export default function Header({ user }: Props) {
                     {({ open }) => (
                       <>
                         <Disclosure.Button className="flex w-full items-center justify-between rounded-lg py-2 pl-3 pr-3.5 text-base font-semibold leading-7 text-brown-900 hover:bg-brown-50">
-                          Инструменты
+                          <div className="flex gap-x-2 items-center">
+                            <RiToolsFill className="text-xl" />
+                            <span>Инструменты</span>
+                          </div>
                           <FaChevronDown
                             className={classNames(
                               open ? 'rotate-180' : '',
-                              'h-5 w-5 flex-none'
+                              'flex-none', 'text-base'
                             )}
                             aria-hidden="true"
                           />
@@ -282,9 +244,9 @@ export default function Header({ user }: Props) {
                                 key={item.name}
                                 as="a"
                                 href={item.href}
-                                className="flex flex-row items-center justify-start rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-brown-900 hover:bg-brown-50"
+                                className="flex flex-row gap-x-2 items-center justify-start rounded-lg py-2 pl-6 pr-3 text-sm font-semibold leading-7 text-brown-900 hover:bg-brown-50"
                               >
-                                <item.icon className="text-lg" />
+                                <item.icon className="text-xl" />
                                 {item.name}
                               </Disclosure.Button>
                             )
