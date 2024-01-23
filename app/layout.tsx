@@ -22,7 +22,7 @@ export default async function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body>
-        <Header user={user} />
+        <Header />
         {children}
       </body>
     </html>
