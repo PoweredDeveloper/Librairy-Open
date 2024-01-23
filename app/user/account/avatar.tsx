@@ -4,6 +4,7 @@ import { Database } from '@/types/supabase'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image'
 import downloadUserProfileImage from '@/app/utils/user/downloadUserProfileImageClient'
+import { FaRegCircleUser } from "react-icons/fa6";
 type Profiles = Database['public']['Tables']['profiles']['Row']
 
 export default function Avatar({
@@ -59,8 +60,12 @@ export default function Avatar({
   }
 
   return (
-    <div>
-      {avatarUrl ? (
+    <div className="col-span-full">
+      <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
+        Photo
+      </label>
+      <div className="mt-2 flex items-center gap-x-3">
+        {avatarUrl ? (
         <Image
           width={size}
           height={size}
@@ -70,26 +75,18 @@ export default function Avatar({
           style={{ height: size, width: size }}
         />
       ) : (
-        <div
-          className="avatar no-image"
-          style={{ height: size, width: size }}
-        />
+        <FaRegCircleUser className="h-12 w-12 text-gray-300" aria-hidden="true" />
       )}
-      <div style={{ width: size }}>
-        <label className="button primary block" htmlFor="single">
-          {uploading ? 'Uploading ...' : 'Upload'}
-        </label>
         <input
-          style={{
-            visibility: 'hidden',
-            position: 'absolute'
-          }}
           type="file"
           id="single"
           accept="image/*"
           onChange={uploadAvatar}
           disabled={uploading}
-        />
+          className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+        >
+          {uploading ? 'Uploading ...' : 'Change'}
+        </input>
       </div>
     </div>
   )
