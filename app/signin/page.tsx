@@ -1,30 +1,9 @@
 'use client'
-import { Database } from '@/types/supabase'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image'
 import logo from '@/app/assets/images/logo/Logo.svg'
 import Link from 'next/link'
 
 export default function AuthForm() {
-  const supabase = createClientComponentClient<Database>()
-
-  async function signInWithGoogle() {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: 'https://librairy.vercel.app/auth/callback/google'
-      }
-    })
-  }
-
-  const signInUser = async (event: any) => {
-    event.preventDefault()
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: event.target.email.value,
-      password: event.target.password.value
-    })
-  }
-
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -40,7 +19,7 @@ export default function AuthForm() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={signInUser} method="POST">
+          <form className="space-y-6" method="POST">
             <div>
               <label
                 htmlFor="email"
@@ -107,7 +86,6 @@ export default function AuthForm() {
             <div>
               <button
                 type="button"
-                onClick={() => signInWithGoogle()}
                 className="w-full border rounded-lg border-brown-800 py-1.5 px-2 md:py-3 md:px-3 flex items-center mt-4 md:mt-7"
               >
                 <svg

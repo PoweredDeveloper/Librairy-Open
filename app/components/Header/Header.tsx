@@ -41,6 +41,13 @@ type HeaderButtonOptionsType = {
   icon: IconType
 }
 
+const advertisementPassRoutes: Array<String> = [
+  '/',
+  '/collections',
+  '/library',
+  '/premium'
+]
+
 const links: Array<HeaderButtonType> = [
   { title: 'Главная', icon: BiHome, link: '/' },
   {
@@ -277,7 +284,7 @@ export default function Header() {
           </Dialog.Panel>
         </Dialog>
       </header>
-      <Banner />
+      {advertisementPassRoutes.includes(pathname) && <Banner />}
     </>
   )
 }

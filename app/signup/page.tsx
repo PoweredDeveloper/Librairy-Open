@@ -1,59 +1,9 @@
 'use client'
-import { Database } from '@/types/supabase'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import Image from 'next/image'
 import logo from '@/app/assets/images/logo/Logo.svg'
 import Link from 'next/link'
 
 export default function AuthForm() {
-  const supabase = createClientComponentClient<Database>()
-
-  function checkFormData(
-    email: string,
-    password: string,
-    rePassword: string
-  ): boolean {
-    if (
-      !/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/.test(
-        email
-      )
-    )
-      return false
-    if (!/^((?=\S*?[A-Z])(?=\S*?[a-z])(?=\S*?[0-9]).{6,})\S$/.test(password))
-      return false
-    if (password.length < 6) return false
-    if (password != rePassword) return false
-    return true
-  }
-
-  async function signInWithGoogle() {
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: {
-        redirectTo: 'https://librairy.vercel.app/auth/callback/google'
-      }
-    })
-  }
-
-  const signUpNewUser = async (event: any) => {
-    if (
-      !checkFormData(
-        event.target.email.value,
-        event.target.password.value,
-        event.target.repassword.value
-      )
-    )
-      return
-    event.preventDefault()
-    const { data, error } = await supabase.auth.signUp({
-      email: event.target.email.value,
-      password: event.target.password.value,
-      options: {
-        emailRedirectTo: 'https://librairy.vercel.app/auth/callback'
-      }
-    })
-  }
-
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -69,7 +19,7 @@ export default function AuthForm() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={signUpNewUser} method="POST">
+          <form className="space-y-6" method="POST">
             <div>
               <label
                 htmlFor="email"
@@ -149,7 +99,6 @@ export default function AuthForm() {
             <div>
               <button
                 type="button"
-                onClick={() => signInWithGoogle()}
                 className="w-full border rounded-lg border-brown-800 py-1.5 px-2 md:py-3 md:px-3 flex items-center mt-4 md:mt-7"
               >
                 <svg
