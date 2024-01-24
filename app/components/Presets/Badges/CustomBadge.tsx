@@ -1,9 +1,9 @@
 import { HTMLAttributes } from "react";
 
 type Props = {
-    ?children: React.ReactNode,
-    ?className: string,
-    ?props: any
+    children?: React.ReactNode,
+    className?: string,
+    props?: React.Attributes
 }
 
 export default function StandartBadge({children, className, ...props}: Props){
