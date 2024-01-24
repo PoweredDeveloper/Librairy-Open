@@ -39,7 +39,7 @@ export default function Profile({ params: { user_id }}: Props) {
                       index < 4 && <div key={badge_id} className='mb-1'>
                         {index < 3
                         ? (badges as IBadges)[badge_id]
-                        : <span className='base inline-flex text-xs items-center rounded-md hover:bg-gray-200 hover:text-gray-700 hover:ring-gray-500/40 cursor-pointer transition-colors bg-gray-50 px-2 py-1 font-medium text-gray-600 ring-1 ring-inset ring-gray-500/20'><HiOutlineDotsHorizontal /></span>}
+                        : <span className='self-baseline inline-flex text-xs items-center rounded-md hover:bg-gray-200 hover:text-gray-700 hover:ring-gray-500/40 cursor-pointer transition-colors bg-gray-50 px-2 py-1 font-medium text-gray-600 ring-1 ring-inset ring-gray-500/20'><HiOutlineDotsHorizontal /></span>}
                       </div>
                     )}
                   </div>
