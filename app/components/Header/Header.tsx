@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { Fragment, useCallback, useState, useEffect } from 'react'
+import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
 
 // Next js
@@ -16,11 +16,11 @@ import Banner from '@/app/components/Header/AdvertismentBannerHeader'
 
 // Icons:
 import { BiHome, BiUserCircle, BiScan } from 'react-icons/bi'
-import { FaBars, FaChevronDown } from 'react-icons/fa'
+import { FaChevronDown } from 'react-icons/fa'
 import { IoLibraryOutline } from 'react-icons/io5'
 import { LuTextSelect, LuShoppingCart } from 'react-icons/lu'
 import { RiToolsFill } from 'react-icons/ri'
-import { FaX } from 'react-icons/fa6'
+import { RxCross2, RxHamburgerMenu } from "react-icons/rx";
 import {
   MdOutlineCollectionsBookmark,
   MdOutlineTranslate
@@ -111,7 +111,7 @@ export default function Header() {
               onClick={() => setMobileMenuOpen(true)}
             >
               <span className="sr-only">Открыть главное меню</span>
-              <FaBars className="h-6 w-6" aria-hidden="true" />
+              <RxHamburgerMenu className="h-6 w-6" aria-hidden="true" />
             </button>
           </div>
           <Popover.Group className="hidden lg:flex lg:gap-x-12">
@@ -211,7 +211,7 @@ export default function Header() {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 <span className="sr-only">Закрыть меню</span>
-                <FaX className="h-6 w-6" aria-hidden="true" />
+                <RxCross2 className="h-6 w-6" aria-hidden="true" />
               </button>
             </div>
             <div className="mt-6 flow-root">
