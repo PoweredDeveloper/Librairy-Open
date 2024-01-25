@@ -1,8 +1,37 @@
 'use client'
 import Avatar from './avatar'
 import { AiFillPicture } from "react-icons/ai";
+import { useCallback, useEffect, useState } from 'react'
+import { createClientComponentClient, User } from '@supabase/auth-helpers-nextjs'
 
-export default function AccountForm() {
+export default function AccountForm({user}: {user: User | null}) {
+  const supabase = createClientComponentClient()
+  const [avatar_url, setAvatarUrl] = useState(null)
+
+  const getProfile = useCallback(async () => {
+    try {
+      const { data, error, status } = await supabase
+        .from('profiles')
+        .select(`avatar_url`)
+        .eq('id', user?.id)
+        .single()
+
+      if (error && status !== 406) {
+        throw error
+      }
+
+      if (data) {
+        setAvatarUrl(data.avatar_url)
+      }
+    } catch (error) {
+      alert('Error loading user data!')
+    }
+  }, [user, supabase])
+
+  useEffect(() => {
+    getProfile()
+  }, [user, getProfile])
+
   return (
     <form>
       <div className="mx-12">
@@ -47,7 +76,7 @@ export default function AccountForm() {
             <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
           </div>
 
-          <Avatar/>
+          <Avatar url={avatar_url} />
 
           <div className="col-span-full">
             <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
