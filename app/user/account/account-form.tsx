@@ -6,7 +6,7 @@ import { createClientComponentClient, User } from '@supabase/auth-helpers-nextjs
 
 export default function AccountForm({user}: {user: User | null}) {
   const supabase = createClientComponentClient()
-  const [avatar_url, setAvatarUrl] = useState(null)
+  const [avatar_url, setAvatarUrl] = useState<string | null>(null)
 
   const getProfile = useCallback(async () => {
     try {
@@ -76,7 +76,14 @@ export default function AccountForm({user}: {user: User | null}) {
             <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
           </div>
 
-          <Avatar url={avatar_url} />
+          <Avatar
+            uid={user?.id}
+            url={avatar_url}
+            size={64}
+            // onUpload={(url) => {
+            //   setAvatarUrl(url)
+            // }}
+          />
 
           <div className="col-span-full">
             <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">

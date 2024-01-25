@@ -1,31 +1,67 @@
 'use client'
-import { FaRegCircleUser } from "react-icons/fa6";
+import React, { useEffect, useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { FaRegCircleUser } from "react-icons/fa6";
 
-export default function Avatar({url}: {url: string | null}) {
+export default function Avatar({
+  uid,
+  url,
+  size,
+  // onUpload,
+}: {
+  uid: string | undefined
+  url: string | null
+  size: number
+  // onUpload: (url: string) => void
+}) {
   const supabase = createClientComponentClient()
-    const [avatarUrl, setAvatarUrl] = useState<string | null>(url)
-  
-    useEffect(() => {
-      async function downloadImage(path: string) {
-        try {
-          const { data, error } = await supabase.storage.from('avatars').download(path)
-          if (error) {
-            throw error
-          }
-  
-          const url = URL.createObjectURL(data)
-          setAvatarUrl(url)
-        } catch (error) {
-          console.log('Error downloading image: ', error)
-        }
-      }
-  
-      if (url) downloadImage(url)
-    }, [url, supabase])
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(url)
+  // const [uploading, setUploading] = useState(false)
 
+  useEffect(() => {
+    async function downloadImage(path: string) {
+      try {
+        const { data, error } = await supabase.storage.from('avatars').download(path)
+        if (error) {
+          throw error
+        }
+
+        const url = URL.createObjectURL(data)
+        setAvatarUrl(url)
+      } catch (error) {
+        console.log('Error downloading image: ', error)
+      }
+    }
+
+    if (url) downloadImage(url)
+  }, [url, supabase])
+
+  // const uploadAvatar: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
+  //   try {
+  //     setUploading(true)
+
+  //     if (!event.target.files || event.target.files.length === 0) {
+  //       throw new Error('You must select an image to upload.')
+  //     }
+
+  //     const file = event.target.files[0]
+  //     const fileExt = file.name.split('.').pop()
+  //     const filePath = `${uid}-${Math.random()}.${fileExt}`
+
+  //     const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
+
+  //     if (uploadError) {
+  //       throw uploadError
+  //     }
+
+  //     onUpload(filePath)
+  //   } catch (error) {
+  //     alert('Error uploading avatar!')
+  //   } finally {
+  //     setUploading(false)
+  //   }
+  // }
   return (
     <div className="col-span-full">
       <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
@@ -33,15 +69,18 @@ export default function Avatar({url}: {url: string | null}) {
       </label>
       <div className="mt-2 flex items-center gap-x-3">
         {avatarUrl
-          ? <Image alt="User Icon" width={128} height={128} src={avatarUrl} className='max-h-12 max-w-12 rounded-full' />
+          ? <Image alt="User Icon" style={{ height: size, width: size }} width={size} height={size} src={avatarUrl} className='max-h-12 max-w-12 rounded-full' />
           : <FaRegCircleUser className="h-12 w-12 text-gray-300" aria-hidden="true" />
         }
         <input
           type="file"
           id="single"
+          // onChange={uploadAvatar}
+          // disabled={uploading}
           accept="image/*"
           className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
         />
+        {/* {uploading ? 'Uploading ...' : 'Upload'} */}
       </div>
     </div>
   )
