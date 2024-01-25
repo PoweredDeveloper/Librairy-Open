@@ -32,6 +32,7 @@ export default function AuthForm() {
         queryParams: {
           access_type: 'offline',
           prompt: 'consent',
+          
         },
       },
     })
