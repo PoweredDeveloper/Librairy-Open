@@ -9,9 +9,6 @@ export default function AccountForm({user}: {user: User | null}) {
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
   const [firstName, setFirstName] = useState<string | null>(null)
 
-  console.log(avatar_url)
-  console.log(firstName)
-
   const getProfile = useCallback(async () => {
     try {
       const { data, error, status } = await supabase
