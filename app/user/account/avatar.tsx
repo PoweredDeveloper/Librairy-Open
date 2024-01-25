@@ -6,7 +6,7 @@ import Image from 'next/image'
 
 export default function Avatar({url}: {url: string | null}) {
   const supabase = createClientComponentClient()
-    const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
+    const [avatarUrl, setAvatarUrl] = useState<string | null>(url)
   
     useEffect(() => {
       async function downloadImage(path: string) {
@@ -16,7 +16,7 @@ export default function Avatar({url}: {url: string | null}) {
             throw error
           }
   
-          const url: string = URL.createObjectURL(data)
+          const url = URL.createObjectURL(data)
           setAvatarUrl(url)
         } catch (error) {
           console.log('Error downloading image: ', error)
