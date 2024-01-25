@@ -2,12 +2,13 @@
 import Avatar from './avatar'
 import { AiFillPicture } from "react-icons/ai";
 import { useCallback, useEffect, useState } from 'react'
-import { createClientComponentClient, User } from '@supabase/auth-helpers-nextjs'
+import { createClientComponentClient, Session } from '@supabase/auth-helpers-nextjs'
 
-export default function AccountForm({user}: {user: User | null}) {
+export default function AccountForm({session}: {session: Session | null}) {
   const supabase = createClientComponentClient()
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
   const [firstName, setFirstName] = useState<string | null>(null)
+  const user = session?.user
 
   const getProfile = useCallback(async () => {
     try {

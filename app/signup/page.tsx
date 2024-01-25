@@ -11,23 +11,27 @@ export default function AuthForm() {
   const password = useRef<HTMLInputElement>(null!)
   const rePassword = useRef<HTMLInputElement>(null!)
 
-  async function signUpNewUser() {
+  const signUpNewUser = async (event: any) => {
     if (!/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/.test(email.current.value)) return
     if (rePassword.current.value !== password.current.value) return
     if (password.current.value.length < 6) return
+    event.preventDefault()
 
     const { data, error } = await supabase.auth.signUp({
       email: email.current.value,
       password: password.current.value,
       options: {
-        emailRedirectTo: '/user/account'
+        emailRedirectTo: 'https://librairy.vercel.app/auth/callback'
       }
     })
   }
 
-  async function signUpWithGoogle() {
+  const signUpWithGoogle = async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'google'
+      provider: 'google',
+      options: {
+        redirectTo: 'https://librairy.vercel.app/auth/callback'
+      }
     })
   }
 
@@ -46,7 +50,7 @@ export default function AuthForm() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={() => signUpNewUser()} method="POST">
+          <form className="space-y-6" onSubmit={signUpNewUser} method="POST">
             <div>
               <label
                 htmlFor="email"
@@ -129,7 +133,7 @@ export default function AuthForm() {
             <div>
               <button
                 type="button"
-                onClick={() => signUpWithGoogle()}
+                onClick={signUpWithGoogle}
                 className="w-full border rounded-lg border-brown-800 py-1.5 px-2 md:py-3 md:px-3 flex items-center mt-4 md:mt-7"
               >
                 <svg
