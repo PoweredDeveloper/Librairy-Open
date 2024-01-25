@@ -49,7 +49,7 @@ export default function DialogAllBadges({children, isOpen, setOpen, person}: Pro
                         {`${person}'s badges:`}
                       </Dialog.Title>
                       <div className="mt-2 w-full">
-                        <p className="text-sm text-gray-500 w-full pr-5">
+                        <p className="text-sm text-gray-500 w-full lg:pr-5">
                           This is a list of {`${person}'s badges.`}
                           {children}
                         </p>

@@ -2,8 +2,41 @@
 import Image from 'next/image'
 import logo from '@/app/assets/images/logo/Logo.svg'
 import Link from 'next/link'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useRef } from 'react'
 
 export default function AuthForm() {
+  const supabase = createClientComponentClient()
+  const email = useRef<HTMLInputElement>(null!)
+  const password = useRef<HTMLInputElement>(null!)
+  const rePassword = useRef<HTMLInputElement>(null!)
+
+  async function signUpNewUser() {
+    if (!/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/.test(email.current.value)) return
+    if (rePassword.current.value !== password.current.value) return
+    if (password.current.value.length < 6) return
+
+    const { data, error } = await supabase.auth.signUp({
+      email: email.current.value,
+      password: password.current.value,
+      options: {
+        emailRedirectTo: '/user/account'
+      }
+    })
+  }
+
+  async function signUpWithGoogle() {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
+    })
+  }
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -19,7 +52,7 @@ export default function AuthForm() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" method="POST">
+          <form className="space-y-6" onSubmit={() => signUpNewUser()} method="POST">
             <div>
               <label
                 htmlFor="email"
@@ -32,6 +65,7 @@ export default function AuthForm() {
                   id="email"
                   name="email"
                   type="email"
+                  ref={email}
                   autoComplete="email"
                   required
                   className="autofill:bg-brown-50 transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
@@ -54,6 +88,7 @@ export default function AuthForm() {
                   name="password"
                   type="password"
                   autoComplete="current-password"
+                  ref={password}
                   required
                   className="autofill:bg-brown-50 transition-colors outline-none block w-full ring-1 ring-inset rounded-md border-0 p-2 text-brown-900 shadow-sm ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
                 />
@@ -74,6 +109,7 @@ export default function AuthForm() {
                   id="repassword"
                   name="repassword"
                   type="password"
+                  ref={rePassword}
                   autoComplete="current-password"
                   required
                   className="autofill:bg-brown-50 transition-colors outline-none block w-full ring-1 ring-inset rounded-md border-0 p-2 text-brown-900 shadow-sm ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
@@ -99,6 +135,7 @@ export default function AuthForm() {
             <div>
               <button
                 type="button"
+                onClick={() => signUpWithGoogle()}
                 className="w-full border rounded-lg border-brown-800 py-1.5 px-2 md:py-3 md:px-3 flex items-center mt-4 md:mt-7"
               >
                 <svg

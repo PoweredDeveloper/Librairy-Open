@@ -180,9 +180,9 @@ export default function Header() {
               // user != null ? 'hidden' : 'block'
             )}
           >
-            <Link href="/premium" className="button aspect- flex items-center justify-center relative">
+            {/* <Link href="/premium" className="button aspect- flex items-center justify-center relative">
               <LuShoppingCart className="absolute left-0 right-0 ml-auto mr-auto" />
-            </Link>
+            </Link> */}
             <Link href="/signin" className="accent-button">
               Войти
             </Link>
