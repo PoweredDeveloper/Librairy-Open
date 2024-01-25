@@ -7,12 +7,16 @@ import { createClientComponentClient, User } from '@supabase/auth-helpers-nextjs
 export default function AccountForm({user}: {user: User | null}) {
   const supabase = createClientComponentClient()
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
+  const [firstName, setFirstName] = useState<string | null>(null)
+
+  console.log(avatar_url)
+  console.log(firstName)
 
   const getProfile = useCallback(async () => {
     try {
       const { data, error, status } = await supabase
         .from('profiles')
-        .select(`avatar_url`)
+        .select(`avatar_url, first_name`)
         .eq('id', user?.id)
         .single()
 
@@ -22,6 +26,7 @@ export default function AccountForm({user}: {user: User | null}) {
 
       if (data) {
         setAvatarUrl(data.avatar_url)
+        setAvatarUrl(data.first_name)
       }
     } catch (error) {
       alert('Error loading user data!')
@@ -123,6 +128,7 @@ export default function AccountForm({user}: {user: User | null}) {
                 type="text"
                 name="first-name"
                 id="first-name"
+                value={firstName || ''}
                 autoComplete="given-name"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
