@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { Fragment, useState } from 'react'
 import { Dialog, Disclosure, Popover, Transition } from '@headlessui/react'
@@ -27,6 +27,8 @@ import {
 } from 'react-icons/md'
 
 import { IconType } from 'react-icons'
+import { User, createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import UserAvatar from '../Presets/User/Avatar'
 
 type HeaderButtonType = {
   title: string,
@@ -87,9 +89,35 @@ function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Header() {
+export default function Header({user}: {user: User | null}) {
+  const supabase = createClientComponentClient()
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const pathname = usePathname()
+
+  const getProfile = useCallback(async () => {
+    try {
+      const { data, error, status } = await supabase
+      .from('profiles')
+      .select(`avatar_url`)
+      .eq('id', user?.id)
+      .single()
+
+      if (error && status !== 406) {
+        throw error
+      }
+
+      if (data) {
+        setAvatarUrl(data.avatar_url)
+      }
+    } catch (error) {
+      alert('Error loading user data! [Icon Header.tsx]')
+    }
+  }, [user, supabase])
+
+  useEffect(() => {
+    getProfile()
+  }, [user, getProfile])
 
   return (
     <>
@@ -176,8 +204,8 @@ export default function Header() {
           </Popover.Group>
           <div
             className={classNames(
-              'hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-2 ml-2',
-              // user != null ? 'hidden' : 'block'
+              'hidden lg:flex-1 lg:justify-end lg:gap-x-2 ml-2',
+              user != null ? 'hidden' : 'lg:flex'
             )}
           >
             {/* <Link href="/premium" className="button aspect- flex items-center justify-center relative">
@@ -187,9 +215,12 @@ export default function Header() {
               Войти
             </Link>
           </div>
-          <div className={classNames('hidden')}>
-            {/* TODO: CHANGE HIDDEN TO AVATAR */}
-            <BiUserCircle className="text-xl" />
+          <div className={classNames('hidden', user == null ? 'hidden' : 'lg:flex')}>
+            <UserAvatar
+              avatarUrl={avatarUrl}
+              size={42}
+              className='rounded-full'
+            />
           </div>
         </nav>
         <Dialog
