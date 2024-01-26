@@ -15,7 +15,7 @@ export default function UploadAvatar({
 }) {
 
   useEffect(() => {
-    console.log(url)
+    console.log('from upload ', url)
   }, [url])
 
   return (

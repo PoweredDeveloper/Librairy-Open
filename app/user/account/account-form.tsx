@@ -36,11 +36,6 @@ export default function AccountForm({user}: {user: User | null}) {
     getProfile()
   }, [user, getProfile])
 
-  useEffect(() => {
-    console.log(avatar_url)
-    console.log(firstName)
-  }, [firstName, avatar_url])
-
   return (
     <form>
       <div className="mx-12">

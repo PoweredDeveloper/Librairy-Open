@@ -26,6 +26,7 @@ export default function UserAvatar({ avatarUrl, size, className }: IUserAvatar) 
         }
 
         if(avatarUrl) downloadAvatar(avatarUrl)
+        console.log('from avatar', avatarUrl)
     }, [supabase, avatarUrl])
 
     return (
