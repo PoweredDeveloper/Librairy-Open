@@ -48,7 +48,7 @@ export default function Banner() {
           href="/premium"
           className="transition-colors flex flex-row items-center gap-1 rounded-full bg-brown-900 px-2.5 py-1 text-sm font-semibold text-white shadow-sm hover:bg-[#5e433d] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brown-900"
         >
-          Зарегестрироваться сейчас <FaArrowRight aria-hidden="true" />
+          Зарегистрироваться сейчас <FaArrowRight aria-hidden="true" />
         </Link>
       </div>
       <div className="flex flex-1 justify-end">
