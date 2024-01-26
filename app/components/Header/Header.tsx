@@ -216,7 +216,7 @@ export default function Header({user}: {user: User | null}) {
               Войти
             </Link>
           </div>
-          <div className={classNames('hidden', user == null ? 'hidden' : 'lg:flex')}>
+          <div className={classNames('hidden lg:flex-1 lg:justify-end', user == null ? 'hidden' : 'lg:flex')}>
             <Link href='/user/account'>
               <UserAvatar
                 avatarUrl={avatarUrl}
@@ -297,7 +297,7 @@ export default function Header({user}: {user: User | null}) {
                     )}
                   </Disclosure>
                 </div>
-                <div className="py-4 flex flex-row items-center justify-around gap-3">
+                <div className={classNames("py-4 flex-row items-center justify-around gap-3", user == null ? 'flex' : 'hidden')}>
                   <Link
                     onClick={() => setMobileMenuOpen(false)}
                     href="/signup"
@@ -311,6 +311,15 @@ export default function Header({user}: {user: User | null}) {
                     className="transition-colors -mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-brown-900 bg-brown-50 hover:bg-brown-100 w-1/2 text-center"
                   >
                     Вход
+                  </Link>
+                </div>
+                <div className={classNames('py-4 justify-around items-center gap-3', user == null ? 'hidden' : 'flex')}>
+                  <Link href='/user/account'>
+                    <UserAvatar
+                      avatarUrl={avatarUrl}
+                      size={48}
+                      className='rounded-full'
+                    />
                   </Link>
                 </div>
               </div>
