@@ -96,6 +96,7 @@ export default function Header({user}: {user: User | null}) {
   const pathname = usePathname()
 
   const getProfile = useCallback(async () => {
+    if (!user) return
     try {
       const { data, error, status } = await supabase
       .from('profiles')
