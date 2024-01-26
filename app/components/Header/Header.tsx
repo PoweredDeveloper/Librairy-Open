@@ -216,11 +216,13 @@ export default function Header({user}: {user: User | null}) {
             </Link>
           </div>
           <div className={classNames('hidden', user == null ? 'hidden' : 'lg:flex')}>
-            <UserAvatar
-              avatarUrl={avatarUrl}
-              size={42}
-              className='rounded-full'
-            />
+            <Link href='/user/account'>
+              <UserAvatar
+                avatarUrl={avatarUrl}
+                size={42}
+                className='rounded-full'
+              />
+            </Link>
           </div>
         </nav>
         <Dialog
