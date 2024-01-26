@@ -219,7 +219,7 @@ export default function AccountForm({user}: {user: User | null}) {
                 autoComplete="email"
                 value={email || ''}
                 disabled
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="select-none block w-full rounded-md border-0 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -230,17 +230,16 @@ export default function AccountForm({user}: {user: User | null}) {
             </label>
             <div className="mt-2">
               <select
-                onChange={(e) => setUserCountry(Number(e.target.options[e.target.selectedIndex]?.value) || 0)}
+                onChange={(e) => setUserCountry(Number(e.target.options[e.target.selectedIndex]?.value))}
                 id="country"
                 name="country"
                 value={userCountry || 0}
-                className="block w-full font-serif rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                className="block w-full font-sans rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
               >
                 <option disabled value={0}>Choose Country</option>
                 {countries.map((country: Country) => {
-                  return (<option key={country.id} className='p-1 flex gap-2'>
-                    {country.icon}
-                    {country.country}
+                  return (<option key={country.id} value={country.id} className='p-1'>
+                    {`${country.icon} ${country.country}`}
                   </option>)
                 })}
               </select>
