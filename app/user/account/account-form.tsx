@@ -22,6 +22,7 @@ export default function AccountForm({user}: {user: User | null}) {
   const [username, setUsername] = useState<string | null>(null)
   const [firstName, setFirstName] = useState<string | null>(null)
   const [lastName, setLastName] = useState<string | null>(null)
+  const [description, setDescription] = useState<string | null>(null)
   const [email, setEmail] = useState<string | null>(null)
   const [userCountry, setUserCountry] = useState<number | null>(null)
 
@@ -31,7 +32,7 @@ export default function AccountForm({user}: {user: User | null}) {
 
       const { data, error, status } = await supabase
         .from('profiles')
-        .select(`avatar_url, first_name, last_name, country, email, username`)
+        .select(`avatar_url, first_name, last_name, country, email, username, description`)
         .eq('id', user?.id)
         .single()
 
@@ -46,6 +47,7 @@ export default function AccountForm({user}: {user: User | null}) {
         setLastName(data.last_name)
         setEmail(data.email)
         setUserCountry(data.country)
+        setDescription(data.description)
       }
       
     } catch (error) {
@@ -60,12 +62,14 @@ export default function AccountForm({user}: {user: User | null}) {
   }, [user, getProfile])
 
   async function updateProfile({
+    description,
     username,
     avatar_url,
   }: {
     username: string | null
     first_name: string | null
     last_name: string | null
+    description: string | null
     avatar_url: string | null
     country: number | null
   }) {
@@ -77,6 +81,7 @@ export default function AccountForm({user}: {user: User | null}) {
         first_name: firstName,
         last_name: lastName,
         country: userCountry,
+        description,
         username,
         avatar_url,
       })
@@ -93,7 +98,7 @@ export default function AccountForm({user}: {user: User | null}) {
     <form className='bg-white max-w-[1200px] lg:rounded-lg lg:p-12 p-6'>
       <div>
         <div className="border-b border-gray-900/10 pb-12 mb-8">
-          <h2 className="text-base font-semibold leading-7 text-gray-900">Edit Profile</h2>
+          <h2 className="text-lg font-semibold leading-7 text-gray-900">Edit Profile</h2>
           <p className="mt-1 text-sm leading-6 text-gray-600">
             This information will be displayed publicly so be careful what you share.
           </p>
@@ -219,7 +224,7 @@ export default function AccountForm({user}: {user: User | null}) {
                 autoComplete="email"
                 value={email || ''}
                 disabled
-                className="select-none block w-full rounded-md border-0 py-1.5 text-gray-700 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="select-none block w-full rounded-md border-0 py-1.5 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -238,8 +243,8 @@ export default function AccountForm({user}: {user: User | null}) {
               >
                 <option disabled value={0}>Choose Country</option>
                 {countries.map((country: Country) => {
-                  return (<option key={country.id} value={country.id} className='p-1'>
-                    {`${country.icon} ${country.country}`}
+                  return (<option key={country.id} value={country.id} className='p-1 cursor-pointer font-sans'>
+                    {`${country.icon}  |  ${country.country}`}
                   </option>)
                 })}
               </select>
@@ -248,7 +253,7 @@ export default function AccountForm({user}: {user: User | null}) {
         </div>
       </div>
 
-      <div className="border-b border-gray-900/10 pb-12 mb-8">
+      <div className="border-b border-gray-900/10 pb-12 mb-8 hidden">
         <h2 className="text-base font-semibold leading-7 text-gray-900">Notifications</h2>
         <p className="mt-1 text-sm leading-6 text-gray-600">
           We&apos;ll always let you know about important changes, but you pick what else you want to hear about.
@@ -360,7 +365,7 @@ export default function AccountForm({user}: {user: User | null}) {
       <button
         type="submit"
         disabled={loading}
-        onClick={() => updateProfile({ first_name: firstName, username, avatar_url, country: userCountry, last_name: lastName })}
+        onClick={() => updateProfile({ first_name: firstName, description, username, avatar_url, country: userCountry, last_name: lastName })}
         className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
       >
         {loading ? 'Saving...' : 'Save'}
