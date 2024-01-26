@@ -2,13 +2,12 @@
 import Avatar from './avatar'
 import { AiFillPicture } from "react-icons/ai";
 import { useCallback, useEffect, useState } from 'react'
-import { createClientComponentClient, Session } from '@supabase/auth-helpers-nextjs'
+import { createClientComponentClient, User } from '@supabase/auth-helpers-nextjs'
 
-export default function AccountForm({session}: {session: Session | null}) {
+export default function AccountForm({user}: {user: User | null}) {
   const supabase = createClientComponentClient()
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
   const [firstName, setFirstName] = useState<string | null>(null)
-  const user = session?.user
 
   const getProfile = useCallback(async () => {
     try {
@@ -24,7 +23,7 @@ export default function AccountForm({session}: {session: Session | null}) {
 
       if (data) {
         setAvatarUrl(data.avatar_url)
-        setAvatarUrl(data.first_name)
+        setFirstName(data.first_name)
       }
     } catch (error) {
       alert('Error loading user data!')
