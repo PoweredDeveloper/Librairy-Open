@@ -1,20 +1,37 @@
 'use client'
 import UploadAvatar from './upload-avatar'
-import Image from 'next/image'
 import { AiFillPicture } from "react-icons/ai";
-import { useCallback, useEffect, useState } from 'react'
+import { ChangeEventHandler, useCallback, useEffect, useState } from 'react'
 import { createClientComponentClient, User } from '@supabase/auth-helpers-nextjs'
+
+type Country = {id: number, icon: string, country: string}
+
+const countries: Array<Country> = [
+  { id: 1, icon: '🇷🇺', country: 'Russia'},
+  { id: 2, icon: '🇨🇳', country: 'China'},
+  { id: 5, icon: '🇧🇾', country: 'Belarus'},
+  { id: 3, icon: '🇰🇿', country: 'Kazakhstan'},
+  { id: 6, icon: '🇺🇸', country: 'United States'},
+  { id: 4, icon: '🇬🇧', country: 'United Kingdom'},
+]
 
 export default function AccountForm({user}: {user: User | null}) {
   const supabase = createClientComponentClient()
+  const [loading, setLoading] = useState(true)
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
+  const [username, setUsername] = useState<string | null>(null)
   const [firstName, setFirstName] = useState<string | null>(null)
+  const [lastName, setLastName] = useState<string | null>(null)
+  const [email, setEmail] = useState<string | null>(null)
+  const [userCountry, setUserCountry] = useState<number | null>(null)
 
   const getProfile = useCallback(async () => {
     try {
+      setLoading(true)
+
       const { data, error, status } = await supabase
         .from('profiles')
-        .select(`avatar_url, first_name`)
+        .select(`avatar_url, first_name, last_name, country, email, username`)
         .eq('id', user?.id)
         .single()
 
@@ -23,12 +40,18 @@ export default function AccountForm({user}: {user: User | null}) {
       }
 
       if (data) {
+        setUsername(data.username)
         setAvatarUrl(data.avatar_url)
         setFirstName(data.first_name)
+        setLastName(data.last_name)
+        setEmail(data.email)
+        setUserCountry(data.country)
       }
       
     } catch (error) {
       alert('Error loading user data!')
+    } finally {
+      setLoading(false)
     }
   }, [user, supabase])
 
@@ -36,10 +59,40 @@ export default function AccountForm({user}: {user: User | null}) {
     getProfile()
   }, [user, getProfile])
 
+  async function updateProfile({
+    username,
+    avatar_url,
+  }: {
+    username: string | null
+    first_name: string | null
+    last_name: string | null
+    avatar_url: string | null
+    country: number | null
+  }) {
+    try {
+      setLoading(true)
+
+      const { error } = await supabase.from('profiles').upsert({
+        id: user?.id as string,
+        first_name: firstName,
+        last_name: lastName,
+        country: userCountry,
+        username,
+        avatar_url,
+      })
+      if (error) throw error
+      alert('Profile updated!')
+    } catch (error) {
+      alert('Error updating the data!')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
-    <form className='bg-white max-w-[1200px] lg:rounded-lg p-6'>
+    <form className='bg-white max-w-[1200px] lg:rounded-lg lg:p-12'>
       <div>
-        <div className="border-b border-gray-900/10 pb-12">
+        <div className="border-b border-gray-900/10 pb-12 mb-8">
           <h2 className="text-base font-semibold leading-7 text-gray-900">Edit Profile</h2>
           <p className="mt-1 text-sm leading-6 text-gray-600">
             This information will be displayed publicly so be careful what you share.
@@ -57,6 +110,8 @@ export default function AccountForm({user}: {user: User | null}) {
                   type="text"
                   name="username"
                   id="username"
+                  value={username || ''}
+                  onChange={(e) => setUsername(e.target.value)}
                   autoComplete="username"
                   className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
                 />
@@ -113,7 +168,7 @@ export default function AccountForm({user}: {user: User | null}) {
         </div>
       </div>
 
-      <div className="border-b border-gray-900/10 pb-12">
+      <div className="border-b border-gray-900/10 pb-12 mb-8">
         <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
         <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
 
@@ -128,6 +183,7 @@ export default function AccountForm({user}: {user: User | null}) {
                 name="first-name"
                 id="first-name"
                 value={firstName || ''}
+                onChange={(e) => setFirstName(e.target.value)}
                 autoComplete="given-name"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -143,6 +199,8 @@ export default function AccountForm({user}: {user: User | null}) {
                 type="text"
                 name="last-name"
                 id="last-name"
+                value={lastName || ''}
+                onChange={(e) => setLastName(e.target.value)}
                 autoComplete="family-name"
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -159,6 +217,7 @@ export default function AccountForm({user}: {user: User | null}) {
                 name="email"
                 type="email"
                 autoComplete="email"
+                value={email || ''}
                 disabled
                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               />
@@ -171,39 +230,26 @@ export default function AccountForm({user}: {user: User | null}) {
             </label>
             <div className="mt-2">
               <select
+                onChange={(e) => setUserCountry(Number(e.target.options[e.target.selectedIndex]?.value) || 0)}
                 id="country"
                 name="country"
-                autoComplete="country-name"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                value={userCountry || 0}
+                className="block w-full font-serif rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
               >
-                <option>Russia</option>
-                <option>Belarus</option>
-                <option>Kazakhstan</option>
-                <option>Ukraine</option>
-                <option>China</option>
-                <option>United States</option>
+                <option disabled value={0}>Choose Country</option>
+                {countries.map((country: Country) => {
+                  return (<option key={country.id} className='p-1 flex gap-2'>
+                    {country.icon}
+                    {country.country}
+                  </option>)
+                })}
               </select>
-            </div>
-          </div>
-
-          <div className="col-span-full">
-            <label htmlFor="street-address" className="block text-sm font-medium leading-6 text-gray-900">
-              Street address
-            </label>
-            <div className="mt-2">
-              <input
-                type="text"
-                name="street-address"
-                id="street-address"
-                autoComplete="street-address"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="border-b border-gray-900/10 pb-12">
+      <div className="border-b border-gray-900/10 pb-12 mb-8">
         <h2 className="text-base font-semibold leading-7 text-gray-900">Notifications</h2>
         <p className="mt-1 text-sm leading-6 text-gray-600">
           We&apos;ll always let you know about important changes, but you pick what else you want to hear about.
@@ -240,7 +286,7 @@ export default function AccountForm({user}: {user: User | null}) {
                 </div>
                 <div className="text-sm leading-6">
                   <label htmlFor="candidates" className="font-medium text-gray-900">
-                    Candidates
+                    Profile visibility
                   </label>
                   <p className="text-gray-500">Get notified when a candidate applies for a job.</p>
                 </div>
@@ -314,9 +360,11 @@ export default function AccountForm({user}: {user: User | null}) {
       </form>
       <button
         type="submit"
+        disabled={loading}
+        onClick={() => updateProfile({ first_name: firstName, username, avatar_url, country: userCountry, last_name: lastName })}
         className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
       >
-        Save
+        {loading ? 'Saving...' : 'Save'}
       </button>
     </div>
   </form>
