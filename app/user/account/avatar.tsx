@@ -43,9 +43,9 @@ export default function Avatar({
         Photo
       </label>
       <div className="mt-2 flex items-center gap-x-3">
-        {avatarUrl
-          ? <Image alt="User Icon" style={{ height: size, width: size }} width={size} height={size} src={avatarUrl} className='max-h-12 max-w-12 rounded-full' />
-          : <FaRegCircleUser className="h-12 w-12 text-gray-300" aria-hidden="true" />
+        {
+          avatarUrl ? (<Image alt="User Icon" style={{ height: size, width: size }} width={size} height={size} src={avatarUrl} className='max-h-12 max-w-12 rounded-full' />)
+          : (<FaRegCircleUser className="h-12 w-12 text-gray-300" aria-hidden="true" />)
         }
         <input
           type="file"
