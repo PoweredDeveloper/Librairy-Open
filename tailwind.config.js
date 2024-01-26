@@ -1,6 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('@headlessui/tailwindcss'),
+  ],
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -32,10 +36,6 @@ module.exports = {
           900: '#43302b'
         }
       }
-    },
-    plugins: [
-      require('@tailwindcss/forms'),
-      require('@headlessui/tailwindcss'),
-    ]
+    }
   }
 }
