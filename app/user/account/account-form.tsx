@@ -1,5 +1,5 @@
 'use client'
-import Avatar from './avatar'
+import UploadAvatar from './upload-avatar'
 import Image from 'next/image'
 import { AiFillPicture } from "react-icons/ai";
 import { useCallback, useEffect, useState } from 'react'
@@ -87,7 +87,7 @@ export default function AccountForm({user}: {user: User | null}) {
 
           <Image alt='User Avatar' src={avatar_url || ''} loading='lazy' />
 
-          <Avatar
+          <UploadAvatar
             uid={user?.id}
             url={avatar_url}
             size={64}
