@@ -17,6 +17,9 @@ export default function AccountForm({user}: {user: User | null}) {
         .eq('id', user?.id)
         .single()
 
+      console.log(avatar_url)
+      console.log(firstName)
+
       if (error && status !== 406) {
         throw error
       }
