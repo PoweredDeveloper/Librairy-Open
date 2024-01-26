@@ -26,8 +26,6 @@ export default function AccountForm({user}: {user: User | null}) {
         setFirstName(data.first_name)
       }
       
-      console.log(avatar_url)
-      console.log(firstName)
     } catch (error) {
       alert('Error loading user data!')
     }
@@ -36,6 +34,11 @@ export default function AccountForm({user}: {user: User | null}) {
   useEffect(() => {
     getProfile()
   }, [user, getProfile])
+
+  useEffect(() => {
+    console.log(avatar_url)
+    console.log(firstName)
+  }, [firstName, avatar_url])
 
   return (
     <form>
