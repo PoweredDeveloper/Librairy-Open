@@ -36,7 +36,7 @@ export default function Profile({ params: { user_id }}: Props) {
   return (
     <>
       <div className='flex justify-center lg:mt-12 mt-0'>
-        <div className="max-w-[1200px] bg-white lg:rounded-t-lg lg:rounded-b-lg">
+        <div className="max-w-[1200px] bg-white lg:rounded-t-lg">
           <div className='text-brown-900'>
             <Image className="object-cover max-h-[160px] lg:rounded-t-lg bg-brown-100" alt="User Banner" src={banner} />
             <div className='flex justify-between items-center p-5 border-b border-brown-600'>
