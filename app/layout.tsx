@@ -1,4 +1,5 @@
 import '@/app/css/global.css'
+import '@/app/utils/customFunctions';
 import Header from '@/app/components/Header/Header'
 import { Inter } from 'next/font/google'
 

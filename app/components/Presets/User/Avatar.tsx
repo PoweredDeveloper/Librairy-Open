@@ -6,39 +6,50 @@ import { useState, useEffect } from 'react';
 interface IUserAvatar {
     avatarUrl: string | null,
     size: number,
-    className?: string | null
+    className?: string | null,
+    props?: React.Attributes
 }
 
-export default function UserAvatar({ avatarUrl, size, className }: IUserAvatar) {
+export default function UserAvatar({ avatarUrl, size, className, ...props }: IUserAvatar) {
     const supabase = createClientComponentClient()
     const [avatar, setAvatar] = useState<string | null>(avatarUrl)
 
     useEffect(() => {
         async function downloadAvatar(path: string) {
-            try {
-                const {data, error} = await supabase.storage.from('avatars').download(path)
-                if (error) throw error
-                const url = URL.createObjectURL(data)
-                setAvatar(url)
-            } catch (error) {
-                console.error('Error while downloading avatar: ', error)
+            if (path.includes('googleusercontent.com')) {
+                try {
+                    size = Math.min(Math.max(size, 16), 2048)
+                    const response = await fetch(path.replace('=s96-c', `=s${size}-c`))
+                    const blobImage = await response.blob()
+                    const url = URL.createObjectURL(blobImage)
+                    setAvatar(url)
+                } catch (error) {
+                    console.error('Error while loading google avatar: ', error)
+                }
+            } else {
+                try {
+                    const {data, error} = await supabase.storage.from('avatars').download(path)
+                    if (error) throw error
+                    const url = URL.createObjectURL(data)
+                    setAvatar(url)
+                } catch (error) {
+                    console.error('Error while downloading avatar: ', error)
+                }
             }
         }
 
         if(avatarUrl) downloadAvatar(avatarUrl)
-        console.log('from avatar', avatarUrl)
     }, [supabase, avatarUrl])
 
     return (
-        <>
-            <Image
-                className={className || ''}
-                alt='user-icon'
-                src={avatar || emptyUserImg}
-                style={{ height: size, width: size }}
-                width={size}
-                height={size}
-            />
-        </>
+        <Image
+            className={className || ''}
+            alt='user-icon'
+            src={avatar || emptyUserImg}
+            style={{ height: size, width: size }}
+            width={size}
+            height={size}
+            {...props}
+        />
     )
 }

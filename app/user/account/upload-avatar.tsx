@@ -14,17 +14,13 @@ export default function UploadAvatar({
   // onUpload: (url: string) => void
 }) {
 
-  useEffect(() => {
-    console.log('from upload ', url)
-  }, [url])
-
   return (
     <div className="col-span-full">
       <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
         Photo
       </label>
       <div className="mt-2 flex items-center gap-x-3">
-        <UserAvatar avatarUrl={url} size={size} className='rounded-full max-h-12 max-w-12' />
+        <UserAvatar avatarUrl={url} size={size} className='rounded-full max-h-12 aspect-square' />
         <input
           type="file"
           id="single"

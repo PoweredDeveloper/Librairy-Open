@@ -80,8 +80,6 @@ export default function AccountForm({user}: {user: User | null}) {
             <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
           </div>
 
-          <Image alt='User Avatar' src={avatar_url || ''} loading='lazy' />
-
           <UploadAvatar
             uid={user?.id}
             url={avatar_url}
