@@ -1,5 +1,6 @@
 'use client'
 import Avatar from './avatar'
+import Image from 'next/image'
 import { AiFillPicture } from "react-icons/ai";
 import { useCallback, useEffect, useState } from 'react'
 import { createClientComponentClient, User } from '@supabase/auth-helpers-nextjs'
@@ -83,6 +84,8 @@ export default function AccountForm({user}: {user: User | null}) {
             </div>
             <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
           </div>
+
+          <Image alt='User Avatar' src={avatar_url || ''} />
 
           <Avatar
             uid={user?.id}
