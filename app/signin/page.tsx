@@ -137,7 +137,7 @@ export default function AuthForm() {
               href="/signup"
               className="transition-colors font-semibold leading-6 text-orange-500 hover:text-orange-600"
             >
-              Зарегестрироваться
+              Зарегистрироваться
             </Link>
           </p>
         </div>
