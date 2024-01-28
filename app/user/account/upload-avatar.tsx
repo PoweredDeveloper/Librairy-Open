@@ -32,7 +32,7 @@ export default function UploadAvatar({
       }
 
       const file = event.target.files[0]
-      const fileExt = file.name.slice((file.name.lastIndexOf(".") - 1 >>> 0) + 2)
+      const fileExt = file.name.split('.').pop()?.toLowerCase() || ''
       const filePath = `${uid}-${Math.random()}.${fileExt}`
 
       if (!(fileExt in allowedFileExt)) throw new Error("File extension is not satisfied")
