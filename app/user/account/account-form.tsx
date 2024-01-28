@@ -25,6 +25,7 @@ export default function AccountForm({user}: {user: User | null}) {
   const [description, setDescription] = useState<string | null>(null)
   const [email, setEmail] = useState<string | null>(null)
   const [userCountry, setUserCountry] = useState<number | null>(null)
+  const [avatarFile, setAvatarFile] = useState<File | undefined>(undefined)
 
   const getProfile = useCallback(async () => {
     try {
@@ -76,6 +77,8 @@ export default function AccountForm({user}: {user: User | null}) {
     try {
       setLoading(true)
 
+      await uploadAvatar(avatar_url, avatarFile)
+
       const { error } = await supabase.from('profiles').upsert({
         id: user?.id as string,
         first_name: firstName,
@@ -85,12 +88,29 @@ export default function AccountForm({user}: {user: User | null}) {
         username,
         avatar_url,
       })
+
       if (error) throw error
       alert('Profile updated!')
     } catch (error) {
       alert('Error updating the data!')
     } finally {
       setLoading(false)
+    }
+  }
+  
+  async function uploadAvatar(filePath: string| null, file: File | undefined) {
+    try {
+      if (!filePath || !file) {
+        throw new Error("[Error] There's no any file path or file. Couldn't upload an avatar")
+      }
+
+      const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
+
+      if(uploadError) {
+        throw uploadError
+      }
+    } catch (error) {
+      alert("[Error] Couldn't upload an avatar " + error)
     }
   }
 
@@ -109,7 +129,7 @@ export default function AccountForm({user}: {user: User | null}) {
                 Username
               </label>
             <div className="mt-2">
-              <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
+              <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-orange-600 sm:max-w-md">
                 <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">librairy.lib/user/</span>
                 <input
                   type="text"
@@ -135,7 +155,7 @@ export default function AccountForm({user}: {user: User | null}) {
                 value={description || ''}
                 onChange={(e) => setDescription(e.target.value)}
                 rows={3}
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6"
                 defaultValue={''}
               />
             </div>
@@ -146,8 +166,9 @@ export default function AccountForm({user}: {user: User | null}) {
             uid={user?.id}
             url={avatar_url}
             size={64}
-            onUpload={(url) => {
+            onUpload={(url, file) => {
               setAvatarUrl(url)
+              setAvatarFile(file)
             }}
           />
 
@@ -161,14 +182,14 @@ export default function AccountForm({user}: {user: User | null}) {
                 <div className="mt-4 flex text-sm leading-6 text-gray-600">
                   <label
                     htmlFor="file-upload"
-                    className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                    className="relative cursor-pointer rounded-md bg-white font-semibold text-orange-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-orange-600 focus-within:ring-offset-2 hover:text-orange-500"
                   >
                     <span>Upload a file</span>
                     <input id="file-upload" name="file-upload" type="file" className="sr-only" />
                   </label>
                   <p className="pl-1">or drag and drop</p>
                 </div>
-                <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 10MB</p>
+                <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 3MB</p>
               </div>
             </div>
           </div>
@@ -192,7 +213,7 @@ export default function AccountForm({user}: {user: User | null}) {
                 value={firstName || ''}
                 onChange={(e) => setFirstName(e.target.value)}
                 autoComplete="given-name"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -209,7 +230,7 @@ export default function AccountForm({user}: {user: User | null}) {
                 value={lastName || ''}
                 onChange={(e) => setLastName(e.target.value)}
                 autoComplete="family-name"
-                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -226,7 +247,7 @@ export default function AccountForm({user}: {user: User | null}) {
                 autoComplete="email"
                 value={email || ''}
                 disabled
-                className="select-none block w-full rounded-md border-0 py-1.5 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                className="select-none block w-full rounded-md border-0 py-1.5 text-gray-600 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6"
               />
             </div>
           </div>
@@ -235,13 +256,13 @@ export default function AccountForm({user}: {user: User | null}) {
             <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
               Country
             </label>
-            <div className="mt-2">
+            <div className="mt-2 cursor-pointer">
               <select
                 onChange={(e) => setUserCountry(Number(e.target.options[e.target.selectedIndex]?.value))}
                 id="country"
                 name="country"
                 value={userCountry || 0}
-                className="block w-full font-sans rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                className="block w-full font-sans rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:max-w-xs sm:text-sm sm:leading-6"
               >
                 <option disabled value={0}>Choose Country</option>
                 {countries.map((country: Country) => {
@@ -271,7 +292,7 @@ export default function AccountForm({user}: {user: User | null}) {
                     id="comments"
                     name="comments"
                     type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                    className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600"
                   />
                 </div>
                 <div className="text-sm leading-6">
@@ -287,7 +308,7 @@ export default function AccountForm({user}: {user: User | null}) {
                     id="candidates"
                     name="candidates"
                     type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                    className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600"
                   />
                 </div>
                 <div className="text-sm leading-6">
@@ -303,7 +324,7 @@ export default function AccountForm({user}: {user: User | null}) {
                     id="offers"
                     name="offers"
                     type="checkbox"
-                    className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                    className="h-4 w-4 rounded border-gray-300 text-orange-600 focus:ring-orange-600"
                   />
                 </div>
                 <div className="text-sm leading-6">
@@ -324,7 +345,7 @@ export default function AccountForm({user}: {user: User | null}) {
                   id="push-everything"
                   name="push-notifications"
                   type="radio"
-                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                  className="h-4 w-4 border-gray-300 text-orange-600 focus:ring-orange-600"
                 />
                 <label htmlFor="push-everything" className="block text-sm font-medium leading-6 text-gray-900">
                   Everything
@@ -335,7 +356,7 @@ export default function AccountForm({user}: {user: User | null}) {
                   id="push-email"
                   name="push-notifications"
                   type="radio"
-                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                  className="h-4 w-4 border-gray-300 text-orange-600 focus:ring-orange-600"
                 />
                 <label htmlFor="push-email" className="block text-sm font-medium leading-6 text-gray-900">
                   Same as email
@@ -346,7 +367,7 @@ export default function AccountForm({user}: {user: User | null}) {
                   id="push-nothing"
                   name="push-notifications"
                   type="radio"
-                  className="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                  className="h-4 w-4 border-gray-300 text-orange-600 focus:ring-orange-600"
                 />
                 <label htmlFor="push-nothing" className="block text-sm font-medium leading-6 text-gray-900">
                   No push notifications
@@ -367,8 +388,16 @@ export default function AccountForm({user}: {user: User | null}) {
       <button
         type="submit"
         disabled={loading}
-        onClick={() => updateProfile({ first_name: firstName, description, username, avatar_url, country: userCountry, last_name: lastName })}
-        className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        onClick={() => {
+          updateProfile({
+            first_name: firstName,
+            description, username,
+            avatar_url,
+            country: userCountry,
+            last_name: lastName
+          })
+        }}
+        className="rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
       >
         {loading ? 'Saving...' : 'Save'}
       </button>

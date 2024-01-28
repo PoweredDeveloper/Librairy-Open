@@ -1,7 +1,13 @@
 'use client'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import UserAvatar from './../../components/Presets/User/Avatar';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+
+const allowedFileExt: Array<string> = [
+  'png',
+  'jpg',
+  'gif'
+]
 
 export default function UploadAvatar({
   uid,
@@ -12,7 +18,7 @@ export default function UploadAvatar({
   uid: string | undefined
   url: string | null
   size: number
-  onUpload: (url: string) => void
+  onUpload: (url: string, file?: File) => void
 }) {
   const supabase = createClientComponentClient()
   const [uploading, setUploading] = useState(false)
@@ -26,18 +32,22 @@ export default function UploadAvatar({
       }
 
       const file = event.target.files[0]
-      const fileExt = file.name.split('.').pop()
+      const fileExt = file.name.slice((file.name.lastIndexOf(".") - 1 >>> 0) + 2)
       const filePath = `${uid}-${Math.random()}.${fileExt}`
 
-      const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
+      if (!(fileExt in allowedFileExt)) throw new Error("File extension is not satisfied")
+      const fileSize = file.size / 1024 / 1024
+      if (fileSize > 2) throw new Error("file is too big")
 
-      if (uploadError) {
-        throw uploadError
-      }
+      // const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
 
-      onUpload(filePath)
+      // if (uploadError) {
+      //   throw uploadError
+      // }
+
+      onUpload(filePath, file)
     } catch (error) {
-      alert('Error uploading avatar!')
+      alert('Error uploading avatar! ' + error)
     } finally {
       setUploading(false)
     }
@@ -57,6 +67,7 @@ export default function UploadAvatar({
           <span>{uploading ? 'Uploading...' : 'Change'}</span>
           <input onChange={uploadAvatar} disabled={uploading} id="avatar-upload" accept='image/*' name="avatar-upload" type="file" className="sr-only" />
         </label>
+        <p className="text-sm leading-5 text-gray-600">PNG, JPG, GIF up to 3MB</p>
       </div>
     </div>
   )

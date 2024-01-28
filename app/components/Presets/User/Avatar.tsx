@@ -1,9 +1,9 @@
 import Image from 'next/image';
 import emptyUserImg from '@/app/assets/images/empty_user.jpg';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, forwardRef, Ref } from 'react';
 
-interface IUserAvatar {
+export interface IUserAvatar {
     avatarUrl: string | null,
     size: number,
     className?: string | null,
