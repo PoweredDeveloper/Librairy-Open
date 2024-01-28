@@ -52,7 +52,6 @@ export default function AuthForm() {
             Регистрация аккаунта
           </h2>
         </div>
-
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" onSubmit={signUpNewUser} method="POST">
             <div>
@@ -74,7 +73,6 @@ export default function AuthForm() {
                 />
               </div>
             </div>
-
             <div>
               <div className="flex items-center justify-between">
                 <label

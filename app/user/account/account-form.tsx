@@ -145,10 +145,10 @@ export default function AccountForm({user}: {user: User | null}) {
           <UploadAvatar
             uid={user?.id}
             url={avatar_url}
-            size={48}
-            // onUpload={(url) => {
-            //   setAvatarUrl(url)
-            // }}
+            size={64}
+            onUpload={(url) => {
+              setAvatarUrl(url)
+            }}
           />
 
           <div className="col-span-full">
