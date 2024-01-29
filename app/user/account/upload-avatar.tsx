@@ -1,7 +1,6 @@
 'use client'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import UserAvatar from './../../components/Presets/User/Avatar';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 const allowedFileExt: Array<string> = [
   'png',
@@ -11,17 +10,14 @@ const allowedFileExt: Array<string> = [
 ]
 
 export default function UploadAvatar({
-  uid,
   url,
   size,
-  onUpload,
+  onChange,
 }: {
-  uid: string | undefined
   url: string | null
   size: number
-  onUpload: (url: string, file?: File) => void
+  onChange: (url: string, file?: File, fileExt?: string) => void
 }) {
-  const supabase = createClientComponentClient()
   const [uploading, setUploading] = useState(false)
 
   const uploadAvatar: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
@@ -35,7 +31,6 @@ export default function UploadAvatar({
       const file = event.target.files[0]
       const fileSize = Math.ceil((file.size / 1024 / 1024) * 10) / 10
       const fileExt = file.name.toLowerCase().split('.').pop() || ''
-      const filePath = `${uid}-${Math.random()}.${fileExt}`
 
       if (!allowedFileExt.includes(fileExt)) {
         throw new Error("File extension is not satisfied")
@@ -44,7 +39,8 @@ export default function UploadAvatar({
         throw new Error("file is too big")
       }
 
-      onUpload(filePath, file)
+      const filePath = URL.createObjectURL(file)
+      onChange(filePath, file, fileExt)
     } catch (error) {
       alert('Error uploading avatar! ' + error)
     } finally {

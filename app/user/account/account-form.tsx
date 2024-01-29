@@ -25,7 +25,6 @@ export default function AccountForm({user}: {user: User | null}) {
   const [description, setDescription] = useState<string | null>(null)
   const [email, setEmail] = useState<string | null>(null)
   const [userCountry, setUserCountry] = useState<number | null>(null)
-  const [avatarFile, setAvatarFile] = useState<File | undefined>(undefined)
 
   const getProfile = useCallback(async () => {
     try {
@@ -163,10 +162,9 @@ export default function AccountForm({user}: {user: User | null}) {
           </div>
 
           <UploadAvatar
-            uid={user?.id}
             url={avatar_url}
             size={64}
-            onUpload={(url) => {
+            onChange={(url) => {
               setAvatarUrl(url)
             }}
           />
