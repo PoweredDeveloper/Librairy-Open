@@ -17,6 +17,7 @@ export default function UserAvatar({ avatarUrl, size, className, ...props }: IUs
 
     useEffect(() => {
         async function downloadAvatar(path: string) {
+            if (path.includes('blob:')) return
             if (path.includes('googleusercontent.com')) {
                 try {
                     const response = await fetch(path.replace('=s96-c', `=s${size}-c`))
@@ -26,7 +27,7 @@ export default function UserAvatar({ avatarUrl, size, className, ...props }: IUs
                 } catch (error) {
                     console.error('Error while loading google avatar: ', error)
                 }
-            } else {
+             } else {
                 try {
                     const {data, error} = await supabase.storage.from('avatars').download(path)
                     if (error) throw error
