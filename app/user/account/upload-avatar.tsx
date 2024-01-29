@@ -6,6 +6,7 @@ import { useRef, useState } from 'react';
 const allowedFileExt: Array<string> = [
   'png',
   'jpg',
+  'jpeg',
   'gif'
 ]
 
@@ -32,12 +33,12 @@ export default function UploadAvatar({
       }
 
       const file = event.target.files[0]
-      const fileExt = file.name.split('.').pop()?.toLowerCase() || ''
+      const fileSize = Math.ceil((file.size / 1024 / 1024) * 10) / 10
+      const fileExt = file.name.toLowerCase().split('.').pop() || ''
       const filePath = `${uid}-${Math.random()}.${fileExt}`
 
-      if (!(fileExt in allowedFileExt)) throw new Error("File extension is not satisfied")
-      const fileSize = file.size / 1024 / 1024
-      if (fileSize > 2) throw new Error("file is too big")
+      if (allowedFileExt.includes(fileExt)) throw new Error("File extension is not satisfied")
+      if (fileSize > 5) throw new Error("file is too big")
 
       // const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
 
@@ -67,7 +68,7 @@ export default function UploadAvatar({
           <span>{uploading ? 'Uploading...' : 'Change'}</span>
           <input onChange={uploadAvatar} disabled={uploading} id="avatar-upload" accept='image/*' name="avatar-upload" type="file" className="sr-only" />
         </label>
-        <p className="text-sm leading-5 text-gray-600">PNG, JPG, GIF up to 3MB</p>
+        <p className="text-sm leading-5 text-gray-600">PNG, JPG, GIF up to 5MB</p>
       </div>
     </div>
   )
