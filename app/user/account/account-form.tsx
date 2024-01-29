@@ -77,7 +77,7 @@ export default function AccountForm({user}: {user: User | null}) {
     try {
       setLoading(true)
 
-      await uploadAvatar(avatar_url, avatarFile)
+      // await uploadAvatar(avatar_url, avatarFile)
 
       const { error } = await supabase.from('profiles').upsert({
         id: user?.id as string,
@@ -98,21 +98,21 @@ export default function AccountForm({user}: {user: User | null}) {
     }
   }
   
-  async function uploadAvatar(filePath: string| null, file: File | undefined) {
-    try {
-      if (!filePath || !file) {
-        throw new Error("[Error] There's no any file path or file. Couldn't upload an avatar")
-      }
+  // async function uploadAvatar(filePath: string| null, file: File | undefined) {
+  //   try {
+  //     if (!filePath || !file) {
+  //       throw new Error("[Error] There's no any file path or file. Couldn't upload an avatar")
+  //     }
 
-      const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
+  //     const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
 
-      if(uploadError) {
-        throw uploadError
-      }
-    } catch (error) {
-      alert("[Error] Couldn't upload an avatar " + error)
-    }
-  }
+  //     if(uploadError) {
+  //       throw uploadError
+  //     }
+  //   } catch (error) {
+  //     alert("[Error] Couldn't upload an avatar " + error)
+  //   }
+  // }
 
   return (
     <form className='bg-white max-w-[1200px] lg:rounded-lg lg:p-12 p-6'>
@@ -166,9 +166,8 @@ export default function AccountForm({user}: {user: User | null}) {
             uid={user?.id}
             url={avatar_url}
             size={64}
-            onUpload={(url, file) => {
+            onUpload={(url) => {
               setAvatarUrl(url)
-              setAvatarFile(file)
             }}
           />
 

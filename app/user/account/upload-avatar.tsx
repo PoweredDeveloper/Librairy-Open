@@ -40,13 +40,9 @@ export default function UploadAvatar({
       if (!allowedFileExt.includes(fileExt)) {
         throw new Error("File extension is not satisfied")
       }
-      if (fileSize > 5) throw new Error("file is too big")
-
-      // const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
-
-      // if (uploadError) {
-      //   throw uploadError
-      // }
+      if (fileSize > 5) {
+        throw new Error("file is too big")
+      }
 
       onUpload(filePath, file)
     } catch (error) {
