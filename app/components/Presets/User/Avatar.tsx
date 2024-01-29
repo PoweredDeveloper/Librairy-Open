@@ -17,7 +17,7 @@ export default function UserAvatar({ avatarUrl, size, className, ...props }: IUs
 
     useEffect(() => {
         async function downloadAvatar(path: string) {
-            if (path.includes('blob:')) return
+            if (path.includes('librairy.vercel.app')) return
             if (path.includes('googleusercontent.com')) {
                 try {
                     const response = await fetch(path.replace('=s96-c', `=s${size}-c`))
