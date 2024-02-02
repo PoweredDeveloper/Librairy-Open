@@ -61,30 +61,20 @@ export default function AccountForm({user}: {user: User | null}) {
     getProfile()
   }, [user, getProfile])
 
-  async function updateProfile({
-    description,
-    username,
-    avatar_url,
-  }: {
-    username: string | null
-    first_name: string | null
-    last_name: string | null
-    description: string | null
-    avatar_url: string | null
-    country: number | null
+  async function updateProfile(updateValues: {
+    username?: string | null
+    first_name?: string | null
+    last_name?: string | null
+    description?: string | null
+    avatar_url?: string | null
+    country?: number | null
   }) {
     try {
       setLoading(true)
 
-      const { error } = await supabase.from('profiles').upsert({
-        id: user?.id as string,
-        first_name: firstName,
-        last_name: lastName,
-        country: userCountry,
-        description,
-        username,
-        avatar_url,
-      })
+      if (!updateValues) return
+
+      const { error } = await supabase.from('profiles').upsert({id: user?.id as string, ...updateValues})
 
       if (error) throw error
       alert('Profile updated!')
@@ -94,22 +84,6 @@ export default function AccountForm({user}: {user: User | null}) {
       setLoading(false)
     }
   }
-  
-  // async function uploadAvatar(filePath: string| null, file: File | undefined) {
-  //   try {
-  //     if (!filePath || !file) {
-  //       throw new Error("[Error] There's no any file path or file. Couldn't upload an avatar")
-  //     }
-
-  //     const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
-
-  //     if(uploadError) {
-  //       throw uploadError
-  //     }
-  //   } catch (error) {
-  //     alert("[Error] Couldn't upload an avatar " + error)
-  //   }
-  // }
 
   return (
     <form className='bg-white max-w-[1200px] lg:rounded-lg lg:p-12 p-6'>
@@ -160,10 +134,14 @@ export default function AccountForm({user}: {user: User | null}) {
           </div>
 
           <UploadAvatar
+            uid={user?.id}
             url={avatar_url}
             size={64}
-            onChange={(url, avatar, fileExtension) => {
+            onChange={(url) => {
               setAvatarUrl(url)
+              updateProfile({
+                avatar_url: avatar_url,
+              })
             }}
           />
 
@@ -386,8 +364,8 @@ export default function AccountForm({user}: {user: User | null}) {
         onClick={() => {
           updateProfile({
             first_name: firstName,
-            description, username,
-            avatar_url,
+            description: description,
+            username: username,
             country: userCountry,
             last_name: lastName
           })
