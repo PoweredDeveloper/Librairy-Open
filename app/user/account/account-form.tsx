@@ -76,8 +76,6 @@ export default function AccountForm({user}: {user: User | null}) {
     try {
       setLoading(true)
 
-      // await uploadAvatar(avatar_url, avatarFile)
-
       const { error } = await supabase.from('profiles').upsert({
         id: user?.id as string,
         first_name: firstName,
@@ -164,7 +162,7 @@ export default function AccountForm({user}: {user: User | null}) {
           <UploadAvatar
             url={avatar_url}
             size={64}
-            onChange={(url) => {
+            onChange={(url, avatar, fileExtension) => {
               setAvatarUrl(url)
             }}
           />

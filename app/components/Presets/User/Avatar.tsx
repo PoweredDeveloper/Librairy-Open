@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import emptyUserImg from '@/app/assets/images/empty_user.jpg';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useState, useEffect, forwardRef, Ref } from 'react';
+import { useState, useEffect } from 'react';
 
 export interface IUserAvatar {
     avatarUrl: string | null,
@@ -17,7 +17,7 @@ export default function UserAvatar({ avatarUrl, size, className, ...props }: IUs
 
     useEffect(() => {
         async function downloadAvatar(path: string) {
-            if (path.includes('librairy.vercel.app')) return
+            if (path.includes('librairy.vercel.app')) setAvatar(avatarUrl)
             if (path.includes('googleusercontent.com')) {
                 try {
                     const response = await fetch(path.replace('=s96-c', `=s${size}-c`))
