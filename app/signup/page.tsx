@@ -4,13 +4,16 @@ import logo from '@/app/assets/images/logo/Logo.svg'
 import Link from 'next/link'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { FormEvent, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation';
 
 export default function AuthForm() {
+  const router = useRouter()
   const supabase = createClientComponentClient()
   const username = useRef<HTMLInputElement>(null!)
   const verificationCode = useRef<HTMLInputElement>(null!)
   const [email, setEmail] = useState<string>(null!)
   const [isMessageSended, setMessageSended] = useState<boolean>(false)
+  const [isLoading, setLoading] = useState<boolean>(false)
 
   const signUpNewUser = async (event: FormEvent<HTMLFormElement>) => {
     if (!/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/.test(email)) return
@@ -27,11 +30,13 @@ export default function AuthForm() {
         }
       }
     })
+    setLoading(true)
 
     if (error != null) return
     if (data.user != null || data.session != null) return
 
     setMessageSended(true)
+    setLoading(false)
   }
 
   const verificateCode = async (event: FormEvent<HTMLFormElement>) => {
@@ -40,10 +45,8 @@ export default function AuthForm() {
       email,
       token: verificationCode.current.value.replace(/\s/g, ""),
       type: 'email',
-      options: {
-        redirectTo: 'https://librairy.vercel.app/user/account'
-      }
     })
+    if (data) router.push('/user/account')
   }
 
   const signUpWithGoogle = async () => {
@@ -74,6 +77,28 @@ export default function AuthForm() {
       {!isMessageSended ?
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form className="space-y-6" onSubmit={signUpNewUser} method="POST">
+          <div>
+              <label
+                htmlFor="username"
+                className="block text-sm leading-6 text-brown-900"
+              >
+                Имя пользователя
+              </label>
+              <div className="mt-2">
+                <input
+                  id="username"
+                  name="username"
+                  type="username"
+                  disabled={isLoading}
+                  ref={username}
+                  autoComplete="username"
+                  placeholder='example@mail.com'
+                  required
+                  className="autofill:bg-brown-50 transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
+                />
+              </div>
+            </div>
+
             <div>
               <label
                 htmlFor="email"
@@ -86,6 +111,7 @@ export default function AuthForm() {
                   id="email"
                   name="email"
                   type="email"
+                  disabled={isLoading}
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
                   required
@@ -95,29 +121,9 @@ export default function AuthForm() {
             </div>
 
             <div>
-              <label
-                htmlFor="username"
-                className="block text-sm leading-6 text-brown-900"
-              >
-                Имя пользователя
-              </label>
-              <div className="mt-2">
-                <input
-                  id="username"
-                  name="username"
-                  type="username"
-                  ref={username}
-                  autoComplete="username"
-                  required
-                  className="autofill:bg-brown-50 transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div>
               <button
                 type="submit"
-                disabled={isMessageSended}
+                disabled={isLoading}
                 className="transition-colors flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
               >
                 Зарегистрироваться
@@ -134,6 +140,7 @@ export default function AuthForm() {
               <button
                 type="button"
                 onClick={signUpWithGoogle}
+                disabled={isLoading}
                 className="w-full border rounded-lg border-brown-800 py-1.5 px-2 md:py-2 md:px-3 flex items-center mt-4 md:mt-7"
               >
                 <svg
@@ -193,12 +200,13 @@ export default function AuthForm() {
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <h4 className='text-center text-brown-900 my-2'>Введите код отправленный вам на почту</h4>
           <form className="space-y-6" onSubmit={e => verificateCode(e)} method="POST">
-            <div className="mt-2">
+            <div>
               <input
                 id="verificationCode"
                 name="verificationCode"
                 type="text"
                 maxLength={6}
+                placeholder='000000'
                 ref={verificationCode}
                 autoComplete="verificationCode"
                 required
@@ -208,7 +216,7 @@ export default function AuthForm() {
             <div>
               <button
                 type="submit"
-                className="transition-colors flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                className="transition-colors flex w-full justify-center cursor-pointer rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
               >
                 Подтвердить
               </button>

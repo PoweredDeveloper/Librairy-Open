@@ -10,6 +10,7 @@ export default function AuthForm() {
   const router = useRouter()
   const supabase = createClientComponentClient()
   const [isMessageSended, setMessageSended] = useState<boolean>(false)
+  const [isLoading, setLoading] = useState<boolean>(false)
   const verificationCode = useRef<HTMLInputElement>(null!)
   const [email, setEmail] = useState<string>(null!)
 
@@ -19,12 +20,18 @@ export default function AuthForm() {
 
     const { data, error } = await supabase.auth.signInWithOtp({
       email: email,
+      options: {
+        shouldCreateUser: false,
+      }
     })
+
+    setLoading(true)
 
     if (error != null) return
     if (data.user != null || data.session != null) return
-
+    
     setMessageSended(true)
+    setLoading(false)
   }
 
   const signUpWithGoogle = async () => {
@@ -42,15 +49,13 @@ export default function AuthForm() {
 
   const verificateCode = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const {data: { session }, error} = await supabase.auth.verifyOtp({
+    const {data, error} = await supabase.auth.verifyOtp({
       email: email,
       token: verificationCode.current.value.replace(/\s/g, ""),
       type: 'email'
     })
 
-    if (session != null) {
-      router.push('/')
-    }
+    if (data) router.push('user/account')
   }
 
   return (
@@ -83,7 +88,9 @@ export default function AuthForm() {
                       id="email"
                       name="email"
                       type="email"
+                      disabled={isLoading}
                       onChange={(e) => setEmail(e.target.value)}
+                      placeholder='example@mail.ru'
                       autoComplete="email"
                       required
                       className="autofill:bg-brown-50 transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
@@ -94,7 +101,7 @@ export default function AuthForm() {
                 <div>
                   <button
                     type="submit"
-                    disabled={isMessageSended}
+                    disabled={isLoading}
                     className="transition-colors flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                   >
                     Войти
@@ -110,6 +117,7 @@ export default function AuthForm() {
                 <div>
                   <button
                     type="button"
+                    disabled={isLoading}
                     onClick={signUpWithGoogle}
                     className="w-full border rounded-lg border-brown-800 py-1.5 px-2 md:py-2 md:px-3 flex items-center mt-4 md:mt-7"
                   >
@@ -171,12 +179,13 @@ export default function AuthForm() {
               <h4 className='text-center text-brown-900 my-2'>Введите код отправленный вам на почту</h4>
             <form className="space-y-6" onSubmit={(e) => verificateCode(e)} method="POST">
               <div>
-                <div className="mt-2">
+                <div>
                   <input
                     id="verificationCode"
                     name="verificationCode"
                     type="text"
                     maxLength={6}
+                    placeholder='000000'
                     ref={verificationCode}
                     autoComplete="verificationCode"
                     required
@@ -189,7 +198,7 @@ export default function AuthForm() {
                 <button
                   type="submit"
                   disabled={isMessageSended}
-                  className="transition-colors flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                  className="transition-colors flex w-full cursor-pointer justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                 >
                   Войти
                 </button>
