@@ -46,9 +46,6 @@ export default function AuthForm() {
       email,
       token: verificationCode.current.value,
       type: 'email',
-      options: {
-        redirectTo: 'https://librairy.vercel.app/auth/callback'
-      }
     })
   }
 
