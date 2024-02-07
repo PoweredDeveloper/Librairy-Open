@@ -195,7 +195,7 @@ export default function AuthForm() {
               <div>
                 <button
                   type="submit"
-                  disabled={isMessageSended}
+                  disabled={isLoading}
                   className="transition-colors flex w-full cursor-pointer justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                 >
                   {isLoading ? <AiOutlineLoading3Quarters className='animate-spin' /> : 'Войти'}
