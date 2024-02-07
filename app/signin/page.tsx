@@ -91,7 +91,7 @@ export default function AuthForm() {
                       placeholder='example@mail.ru'
                       autoComplete="email"
                       required
-                      className="autofill:bg-brown-50 disabled:bg-brown-300 transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
+                      className="autofill:bg-brown-50 disabled:bg-brown-100 transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
@@ -100,7 +100,7 @@ export default function AuthForm() {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="transition-colors disabled:bg-orange-400 flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                    className="transition-colors disabled:bg-brown-800 flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                   >
                     {isLoading ? <AiOutlineLoading3Quarters className='animate-spin' /> : 'Войти'}
                   </button>
@@ -196,7 +196,7 @@ export default function AuthForm() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="transition-colors flex w-full cursor-pointer justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                  className="transition-colors disabled:bg-brown-800 flex w-full cursor-pointer justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                 >
                   {isLoading ? <AiOutlineLoading3Quarters className='animate-spin' /> : 'Войти'}
                 </button>
