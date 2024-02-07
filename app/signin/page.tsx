@@ -4,8 +4,10 @@ import logo from '@/app/assets/images/logo/Logo.svg'
 import Link from 'next/link'
 import { useRef, useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { useRouter } from 'next/navigation'
 
 export default function AuthForm() {
+  const router = useRouter()
   const supabase = createClientComponentClient()
   const [isMessageSended, setMessageSended] = useState<boolean>(false)
   const verificationCode = useRef<HTMLInputElement>(null!)
@@ -16,7 +18,7 @@ export default function AuthForm() {
     event.preventDefault()
 
     const { data, error } = await supabase.auth.signInWithOtp({
-      email,
+      email: email,
       options: {
         shouldCreateUser: false,
       }
@@ -43,10 +45,14 @@ export default function AuthForm() {
 
   const verificateCode = async () => {
     const {data: { session }, error} = await supabase.auth.verifyOtp({
-      email,
-      token: verificationCode.current.value,
-      type: 'email',
+      email: email,
+      token: verificationCode.current.value.replace(/\s/g, ""),
+      type: 'email'
     })
+
+    if (session != null) {
+      router.push('/')
+    }
   }
 
   return (

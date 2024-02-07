@@ -20,7 +20,7 @@ export default function AuthForm() {
     event.preventDefault()
 
     const { data, error } = await supabase.auth.signInWithOtp({
-      email,
+      email: email,
       options: {
         shouldCreateUser: true,
         data: {
@@ -36,9 +36,10 @@ export default function AuthForm() {
   }
 
   const verificateCode = async () => {
+    console.log('verify')
     const {data: { session }, error} = await supabase.auth.verifyOtp({
-      email,
-      token: verificationCode.current.value,
+      email: email,
+      token: verificationCode.current.value.replace(/\s/g, ""),
       type: 'email',
     })
     console.log(session)
