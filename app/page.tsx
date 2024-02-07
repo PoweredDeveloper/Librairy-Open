@@ -17,7 +17,7 @@ export default function Page() {
             Любимую <span className='text-orange-400'>книгу</span><br />
             Здесь!
           </h1>
-          <p className='mt-3 text-center lg:text-left text-brown-900'>Онлайн библиотека уже с ИИ.<span>Испытайте чтение по новому</span></p>
+          <p className='mt-3 text-center lg:text-left text-brown-900'>Онлайн библиотека уже с ИИ.<span className='sm:hidden'>Испытайте чтение по новому</span></p>
           <Link href='/signup' className='accent-button flex items-center px-4 md:p-2 gap-3 mt-4 md:mt-8 lg:mt-14 w-min'>
             <span>Начать</span>
             <FaArrowRight className='block lg:hidden' />
