@@ -2,11 +2,42 @@
 import Image from 'next/image'
 import logo from '@/app/assets/images/logo/Logo.svg'
 import Link from 'next/link'
+import { useRef } from 'react'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 
 export default function AuthForm() {
+  const supabase = createClientComponentClient()
+  const email = useRef<HTMLInputElement>(null!)
+
+  const signInUser = async (event: any) => {
+    if (!/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/.test(email.current.value)) return
+    event.preventDefault()
+
+    const { data, error } = await supabase.auth.signInWithOtp({
+      email: email.current.value,
+      options: {
+        shouldCreateUser: false,
+        emailRedirectTo: 'https://librairy.vercel.app/auth/callback'
+      }
+    })
+  }
+
+  const signUpWithGoogle = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: 'https://librairy.vercel.app/auth/callback',
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent'
+        }
+      }
+    })
+  }
+
   return (
     <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="flex flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <Image
             className="mx-auto h-10 w-auto"
@@ -23,7 +54,7 @@ export default function AuthForm() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium leading-6 text-brown-900"
+                className="block text-sm leading-6 text-brown-900"
               >
                 E-mail
               </label>
@@ -32,6 +63,7 @@ export default function AuthForm() {
                   id="email"
                   name="email"
                   type="email"
+                  ref={email}
                   autoComplete="email"
                   required
                   className="autofill:bg-brown-50 transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
@@ -43,7 +75,7 @@ export default function AuthForm() {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-brown-900"
+                  className="block text-sm leading-6 text-brown-900"
                 >
                   Пароль
                 </label>
@@ -78,7 +110,7 @@ export default function AuthForm() {
             </div>
             <div className="flex items-center justify-center my-6">
               <div className="border-b border-brown-400 w-1/2"></div>
-              <p className="text-xs sm:text-sm md:text-base font-medium leading-none text-brown-400 px-3">
+              <p className="text-xs sm:text-sm md:text-base leading-none text-brown-400 px-3">
                 ИЛИ
               </p>
               <div className="border-b border-brown-400 w-1/2"></div>
@@ -86,7 +118,8 @@ export default function AuthForm() {
             <div>
               <button
                 type="button"
-                className="w-full border rounded-lg border-brown-800 py-1.5 px-2 md:py-3 md:px-3 flex items-center mt-4 md:mt-7"
+                onClick={signUpWithGoogle}
+                className="w-full border rounded-lg border-brown-800 py-1.5 px-2 md:py-2 md:px-3 flex items-center mt-4 md:mt-7"
               >
                 <svg
                   width="25"
@@ -124,18 +157,18 @@ export default function AuthForm() {
                     </clipPath>
                   </defs>
                 </svg>
-                <p className="text-xs sm:text-sm md:text-base font-medium leading-none ml-4 text-brown-800">
+                <p className="text-xs sm:text-sm md:text-base leading-none ml-4 text-brown-800">
                   Продолжить через Google
                 </p>
               </button>
             </div>
           </form>
 
-          <p className="mt-10 text-center text-sm text-brown-500">
-            Не читатель?{' '}
+          <p className="mt-10 text-center text-sm flex items-center justify-center gap-1 text-brown-700">
+            Все еще читатель?
             <Link
               href="/signup"
-              className="transition-colors font-semibold leading-6 text-orange-500 hover:text-orange-600"
+              className="transition-colors font-medium underline leading-6 text-orange-500 hover:text-orange-600"
             >
               Зарегистрироваться
             </Link>

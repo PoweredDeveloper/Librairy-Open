@@ -34,7 +34,7 @@ export default function Profile({ params: { user_id }}: Props) {
   const [openDialog, setOpenDialog] = useState(false)
   const userBadges: string[] = ['premium']
   return (
-    <>
+    <div className='bg-brown-100 flex-auto'>
       <div className='flex justify-center lg:mt-12 mt-0'>
         <div className="max-w-[1200px] bg-white lg:rounded-t-lg">
           <div className='text-brown-900'>
@@ -117,6 +117,6 @@ export default function Profile({ params: { user_id }}: Props) {
           )}
         </table>
       </DialogAllBadges>
-    </>
+    </div>
   )
 }

@@ -1,11 +1,11 @@
 import '@/app/css/global.css'
 import '@/app/utils/customFunctions';
 import Header from '@/app/components/Header/Header'
-import { Inter } from 'next/font/google'
+import { Commissioner } from 'next/font/google'
 import { cookies } from 'next/headers';
 import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 
-const inter = Inter({ weight: ['300'], subsets: ['cyrillic', 'latin'] })
+const inter = Commissioner({ weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'], subsets: ['cyrillic', 'latin'] })
 
 export default async function RootLayout({
   children
@@ -25,7 +25,7 @@ export default async function RootLayout({
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
-      <body className='bg-brown-100'>
+      <body className='h-screen flex flex-col'>
         <Header user={user} />
         {children}
       </body>

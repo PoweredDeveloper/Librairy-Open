@@ -121,10 +121,10 @@ export default function Header({user}: {user: User | null}) {
   }, [user, getProfile])
 
   return (
-    <>
+    <div className='flex-initial'>
       <header className="bg-white">
         <nav
-          className="mx-auto flex max-w-12xl items-center justify-between p-6 lg:px-8"
+          className="mx-auto flex max-w-12xl items-center justify-between p-5 lg:px-8"
           aria-label="Global"
         >
           <div className="flex lg:flex-1">
@@ -328,6 +328,6 @@ export default function Header({user}: {user: User | null}) {
         </Dialog>
       </header>
       {advertisementPassRoutes.includes(pathname) && <Banner />}
-    </>
+    </div>
   )
 }

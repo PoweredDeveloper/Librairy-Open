@@ -11,7 +11,7 @@ export default async function Account() {
   } = await supabase.auth.getUser()
 
   return (
-    <div className='lg:my-12 my-0 flex justify-center'>
+    <div className='lg:my-12 my-0 flex justify-center bg-brown-100 flex-auto'>
       <AccountForm user={user} />
     </div>
   )

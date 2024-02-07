@@ -38,7 +38,7 @@
     transform-origin: bottom left;
   }
   .button {
-    @apply px-3 py-2.5 rounded-lg cursor-pointer border border-brown-500 text-brown-900 hover:bg-brown-100 bg-transparent text-sm font-semibold;
+    @apply px-3.5 py-2 rounded-xl cursor-pointer border border-brown-500 text-brown-900 hover:bg-brown-100 bg-transparent text-sm font-semibold;
     transition: 0.15s;
   }
   .hover-button {
