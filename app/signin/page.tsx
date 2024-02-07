@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { FormEvent, useRef, useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 export default function AuthForm() {
   const router = useRouter()
@@ -13,6 +14,7 @@ export default function AuthForm() {
   const [isLoading, setLoading] = useState<boolean>(false)
   const verificationCode = useRef<HTMLInputElement>(null!)
   const [email, setEmail] = useState<string>(null!)
+  
 
   const signInUser = async (event: FormEvent<HTMLFormElement>) => {
     if (!/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/.test(email)) return
@@ -49,13 +51,14 @@ export default function AuthForm() {
 
   const verificateCode = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setLoading(true)
     const {data, error} = await supabase.auth.verifyOtp({
       email: email,
       token: verificationCode.current.value.replace(/\s/g, ""),
       type: 'email'
     })
-
-    if (data) router.push('user/account')
+    setLoading(false)
+    if (data) router.push('/user/account')
   }
 
   return (
@@ -93,7 +96,7 @@ export default function AuthForm() {
                       placeholder='example@mail.ru'
                       autoComplete="email"
                       required
-                      className="autofill:bg-brown-50 transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
+                      className="autofill:bg-brown-50 disabled:bg-brown-300 transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
                     />
                   </div>
                 </div>
@@ -102,7 +105,7 @@ export default function AuthForm() {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className="transition-colors flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
+                    className="transition-colors disabled:bg-orange-400 flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                   >
                     Войти
                   </button>
@@ -176,7 +179,7 @@ export default function AuthForm() {
             </div>
           :
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-              <h4 className='text-center text-brown-900 my-2'>Введите код отправленный вам на почту</h4>
+              <h4 className='text-center text-brown-900 mb-5'>Введите код отправленный вам на почту</h4>
             <form className="space-y-6" onSubmit={(e) => verificateCode(e)} method="POST">
               <div>
                 <div>
@@ -189,7 +192,7 @@ export default function AuthForm() {
                     ref={verificationCode}
                     autoComplete="verificationCode"
                     required
-                    className="autofill:bg-brown-50 transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
+                    className="autofill:bg-brown-50 text-center font-bold tracking-[3px] text-4xl transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>
@@ -200,7 +203,7 @@ export default function AuthForm() {
                   disabled={isMessageSended}
                   className="transition-colors flex w-full cursor-pointer justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                 >
-                  Войти
+                  {isLoading? <AiOutlineLoading3Quarters className='animate-spin' /> : 'Войти'}
                 </button>
               </div>
             </form>
