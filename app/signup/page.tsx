@@ -17,6 +17,7 @@ export default function AuthForm() {
   const [isLoading, setLoading] = useState<boolean>(false)
 
   const signUpNewUser = async (event: FormEvent<HTMLFormElement>) => {
+    setLoading(true)
     if (!/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/.test(email)) return
     if (username.current.value.length < 3) return
     if (username.current.value.length > 20) return
@@ -31,7 +32,6 @@ export default function AuthForm() {
         }
       }
     })
-    setLoading(true)
 
     if (error != null) return
     if (data.user != null || data.session != null) return

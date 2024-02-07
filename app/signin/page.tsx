@@ -16,13 +16,13 @@ export default function AuthForm() {
   const [email, setEmail] = useState<string>(null!)
 
   const signInUser = async (event: FormEvent<HTMLFormElement>) => {
+    setLoading(true)
     if (!/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/.test(email)) return
     event.preventDefault()
 
     const { data, error } = await supabase.auth.signInWithOtp({
       email: email
     })
-    setLoading(true)
 
     if (error != null) return
     if (data.user != null || data.session != null) return
