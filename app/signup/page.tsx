@@ -24,7 +24,7 @@ export default function AuthForm() {
       options: {
         shouldCreateUser: true,
         data: {
-          username: username.current.value
+          full_name: username.current.value
         }
       }
     })
@@ -117,6 +117,7 @@ export default function AuthForm() {
             <div>
               <button
                 type="submit"
+                disabled={isMessageSended}
                 className="transition-colors flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
               >
                 Зарегистрироваться
