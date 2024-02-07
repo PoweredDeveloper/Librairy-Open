@@ -6,7 +6,7 @@ export default function Banner() {
   return (
     <div
       id="ad-premium-banner"
-      className="relative isolate flex items-center gap-x-6 overflow-hidden bg-brown-50 px-6 py-1.5 sm:px-3.5 sm:before:flex-1"
+      className="relative hidden lg:flex isolate items-center gap-x-6 overflow-hidden bg-brown-50 px-6 py-1.5 sm:px-3.5 sm:before:flex-1"
     >
       <div
         className="absolute left-[max(-7rem,calc(50%-52rem))] top-1/2 -z-10 -translate-y-1/2 transform-gpu blur-2xl"
