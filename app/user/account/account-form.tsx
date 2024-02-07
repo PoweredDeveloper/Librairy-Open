@@ -86,7 +86,7 @@ export default function AccountForm({user}: {user: User | null}) {
   }
 
   return (
-    <form className='bg-white max-w-[1200px] lg:rounded-lg lg:p-12 p-6'>
+    <form className='bg-white max-w-[1200px] w-max my-0 lg:my-12 lg:rounded-lg lg:p-12 p-6'>
       <div>
         <div className="border-b border-gray-900/10 pb-12 mb-8">
           <h2 className="text-lg font-semibold leading-7 text-gray-900">Edit Profile</h2>
