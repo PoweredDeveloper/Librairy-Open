@@ -14,24 +14,19 @@ export default function AuthForm() {
   const [isLoading, setLoading] = useState<boolean>(false)
   const verificationCode = useRef<HTMLInputElement>(null!)
   const [email, setEmail] = useState<string>(null!)
-  
 
   const signInUser = async (event: FormEvent<HTMLFormElement>) => {
     if (!/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/.test(email)) return
     event.preventDefault()
 
     const { data, error } = await supabase.auth.signInWithOtp({
-      email: email,
-      options: {
-        shouldCreateUser: false,
-      }
+      email: email
     })
-
     setLoading(true)
 
     if (error != null) return
     if (data.user != null || data.session != null) return
-    
+
     setMessageSended(true)
     setLoading(false)
   }
@@ -52,10 +47,10 @@ export default function AuthForm() {
   const verificateCode = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setLoading(true)
-    const {data, error} = await supabase.auth.verifyOtp({
-      email: email,
+    const { data, error } = await supabase.auth.verifyOtp({
+      email,
       token: verificationCode.current.value.replace(/\s/g, ""),
-      type: 'email'
+      type: 'email',
     })
     setLoading(false)
     if (data) router.push('/user/account')
@@ -107,7 +102,7 @@ export default function AuthForm() {
                     disabled={isLoading}
                     className="transition-colors disabled:bg-orange-400 flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                   >
-                    Войти
+                    {isLoading ? <AiOutlineLoading3Quarters className='animate-spin' /> : 'Войти'}
                   </button>
                 </div>
                 <div className="flex items-center justify-center my-6">
@@ -203,7 +198,7 @@ export default function AuthForm() {
                   disabled={isMessageSended}
                   className="transition-colors flex w-full cursor-pointer justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                 >
-                  {isLoading? <AiOutlineLoading3Quarters className='animate-spin' /> : 'Войти'}
+                  {isLoading ? <AiOutlineLoading3Quarters className='animate-spin' /> : 'Войти'}
                 </button>
               </div>
             </form>
