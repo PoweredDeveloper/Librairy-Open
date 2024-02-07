@@ -3,7 +3,7 @@ import Image from 'next/image'
 import logo from '@/app/assets/images/logo/Logo.svg'
 import Link from 'next/link'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
-import { useRef, useState } from 'react'
+import { FormEvent, useRef, useState } from 'react'
 
 export default function AuthForm() {
   const supabase = createClientComponentClient()
@@ -12,7 +12,7 @@ export default function AuthForm() {
   const [email, setEmail] = useState<string>(null!)
   const [isMessageSended, setMessageSended] = useState<boolean>(false)
 
-  const signUpNewUser = async (event: any) => {
+  const signUpNewUser = async (event: FormEvent<HTMLFormElement>) => {
     if (!/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/.test(email)) return
     if (username.current.value.length < 3) return
     if (username.current.value.length > 20) return
@@ -22,7 +22,6 @@ export default function AuthForm() {
     const { data, error } = await supabase.auth.signInWithOtp({
       email: email,
       options: {
-        shouldCreateUser: true,
         data: {
           full_name: username.current.value
         }
@@ -35,14 +34,16 @@ export default function AuthForm() {
     setMessageSended(true)
   }
 
-  const verificateCode = async () => {
-    console.log('verify')
-    const {data: { session }, error} = await supabase.auth.verifyOtp({
-      email: email,
+  const verificateCode = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const { data, error } = await supabase.auth.verifyOtp({
+      email,
       token: verificationCode.current.value.replace(/\s/g, ""),
       type: 'email',
+      options: {
+        redirectTo: 'https://librairy.vercel.app/user/account'
+      }
     })
-    console.log(session)
   }
 
   const signUpWithGoogle = async () => {
@@ -191,7 +192,7 @@ export default function AuthForm() {
       :
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <h4 className='text-center text-brown-900 my-2'>Введите код отправленный вам на почту</h4>
-          <form className="space-y-6" onSubmit={verificateCode} method="POST">
+          <form className="space-y-6" onSubmit={e => verificateCode(e)} method="POST">
             <div className="mt-2">
               <input
                 id="verificationCode"

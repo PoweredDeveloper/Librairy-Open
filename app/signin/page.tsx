@@ -2,7 +2,7 @@
 import Image from 'next/image'
 import logo from '@/app/assets/images/logo/Logo.svg'
 import Link from 'next/link'
-import { useRef, useState } from 'react'
+import { FormEvent, useRef, useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
 
@@ -13,15 +13,12 @@ export default function AuthForm() {
   const verificationCode = useRef<HTMLInputElement>(null!)
   const [email, setEmail] = useState<string>(null!)
 
-  const signInUser = async (event: any) => {
+  const signInUser = async (event: FormEvent<HTMLFormElement>) => {
     if (!/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/.test(email)) return
     event.preventDefault()
 
     const { data, error } = await supabase.auth.signInWithOtp({
       email: email,
-      options: {
-        shouldCreateUser: false,
-      }
     })
 
     if (error != null) return
@@ -43,7 +40,8 @@ export default function AuthForm() {
     })
   }
 
-  const verificateCode = async () => {
+  const verificateCode = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
     const {data: { session }, error} = await supabase.auth.verifyOtp({
       email: email,
       token: verificationCode.current.value.replace(/\s/g, ""),
@@ -72,7 +70,7 @@ export default function AuthForm() {
         {
           !isMessageSended ?
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-              <form className="space-y-6" method="POST">
+              <form className="space-y-6" onSubmit={(e) => signInUser(e)} method="POST">
                 <div>
                   <label
                     htmlFor="email"
@@ -96,7 +94,6 @@ export default function AuthForm() {
                 <div>
                   <button
                     type="submit"
-                    onClick={signInUser}
                     disabled={isMessageSended}
                     className="transition-colors flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                   >
@@ -172,7 +169,7 @@ export default function AuthForm() {
           :
             <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
               <h4 className='text-center text-brown-900 my-2'>Введите код отправленный вам на почту</h4>
-            <form className="space-y-6" onSubmit={verificateCode} method="POST">
+            <form className="space-y-6" onSubmit={(e) => verificateCode(e)} method="POST">
               <div>
                 <div className="mt-2">
                   <input
@@ -191,7 +188,6 @@ export default function AuthForm() {
               <div>
                 <button
                   type="submit"
-                  onClick={signInUser}
                   disabled={isMessageSended}
                   className="transition-colors flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
                 >
