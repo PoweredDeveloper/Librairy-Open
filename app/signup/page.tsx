@@ -214,7 +214,7 @@ export default function AuthForm() {
                 ref={verificationCode}
                 autoComplete="verificationCode"
                 required
-                className="autofill:bg-brown-50 text-center font-bold tracking-[3px] text-4xl transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-xl sm:leading-6"
+                className="autofill:bg-brown-50 text-center font-bold tracking-[3px] lg:tracking-[5px] text-3xl transition-colors outline-none block w-full rounded-md border-0 p-2 text-brown-900 shadow-sm ring-1 ring-inset ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-xl sm:leading-6"
               />
             </div>
             <div>
