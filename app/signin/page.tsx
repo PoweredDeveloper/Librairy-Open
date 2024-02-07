@@ -72,37 +72,9 @@ export default function AuthForm() {
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="block text-sm leading-6 text-brown-900"
-                >
-                  Пароль
-                </label>
-                <div className="text-sm">
-                  <a
-                    href="#"
-                    className="transition-colors text-orange-500 hover:text-orange-600"
-                  >
-                    Забыли пароль?
-                  </a>
-                </div>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  className="autofill:bg-brown-50 transition-colors outline-none block w-full ring-1 ring-inset rounded-md border-0 p-2 text-brown-900 shadow-sm ring-brown-300 placeholder:text-brown-400 focus:ring-2 focus:ring-inset focus:ring-orange-500 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div>
               <button
                 type="submit"
+                onClick={signInUser}
                 className="transition-colors flex w-full justify-center rounded-md bg-orange-500 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-orange-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
               >
                 Войти
