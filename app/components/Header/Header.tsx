@@ -237,7 +237,7 @@ export default function Header({user}: {user: User | null}) {
             <div className="flex items-center justify-between">
               <Link href="#" className="-m-1.5 p-1.5">
                 <span className="sr-only">Librairy</span>
-                <Image className="h-8 w-auto" src={logo} alt="" />
+                <Image className="h-10 w-auto" src={logo} alt="" />
               </Link>
               <button
                 type="button"
