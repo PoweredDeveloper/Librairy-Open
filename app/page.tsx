@@ -9,16 +9,16 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className='flex justify-between items-center flex-auto'>
-      <div className='flex flex-col justify-center lg:justify-start gap-3 lg:ml-32'>
-          <Link href='/premium' className='mb-2 px-2 py-1 rounded-full border cursor-pointer border-brown-900 bg-brown-200 text-brown-900'>Получите премиум бесплатно!</Link>
+    <div className='flex lg:justify-between justify-center items-center flex-auto'>
+      <div className='flex flex-col items-center lg:items-start gap-3 lg:ml-32'>
+          <Link href='/premium' className='mb-2 px-2 py-0.5 text-sm flex gap-2 block lg:hidden items-center rounded-full border cursor-pointer border-brown-900 bg-brown-50 text-brown-900'>Получите премиум бесплатно!<FaArrowRight /></Link>
           <h1 className='lg:text-left text-center text-brown-900 lg:text-7xl text-4xl font-bold'>
             Приобретите <span className='text-orange-400'>свою</span><br />
             Любимую <span className='text-orange-400'>книгу</span><br />
             Здесь!
           </h1>
           <p className='mt-3 text-center lg:text-left text-brown-900'>Онлайн библиотека уже с ИИ. <span className='lg:hidden block'>Испытайте чтение по новому</span></p>
-          <Link href='/signup' className='accent-button flex items-center gap-3 mt-4 lg:mt-14 w-min'>
+          <Link href='/signup' className='accent-button flex items-center px-2 lg:px-0 gap-3 mt-4 lg:mt-14 w-min'>
             <span>Начать</span>
             <FaArrowRight className='block lg:hidden' />
             <svg className='hidden lg:block' width="96" height="16" viewBox="0 0 96 16" fill="none" xmlns="http://www.w3.org/2000/svg">
