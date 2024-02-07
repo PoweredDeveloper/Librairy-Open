@@ -18,7 +18,7 @@ export default function Page() {
             Здесь!
           </h1>
           <p className='mt-3 text-center lg:text-left text-brown-900'>Онлайн библиотека уже с ИИ. <span className='lg:hidden md:block block'>Испытайте чтение по новому</span></p>
-          <Link href='/signup' className='accent-button flex items-center px-2 md:p-2 gap-3 mt-4 md:mt-8 lg:mt-14 w-min'>
+          <Link href='/signup' className='accent-button flex items-center px-4 md:p-2 gap-3 mt-4 md:mt-8 lg:mt-14 w-min'>
             <span>Начать</span>
             <FaArrowRight className='block lg:hidden' />
             <svg className='hidden lg:block' width="96" height="16" viewBox="0 0 96 16" fill="none" xmlns="http://www.w3.org/2000/svg">
