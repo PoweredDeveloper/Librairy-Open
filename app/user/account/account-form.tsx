@@ -368,7 +368,6 @@ export default function AccountForm({user}: {user: User | null}) {
             country: userCountry,
             first_name: firstName,
             last_name: lastName,
-            avatar_url: avatar_preview,
             description,
             username,
           })
