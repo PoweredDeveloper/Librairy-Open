@@ -24,6 +24,12 @@ export default function AuthForm() {
     setLoading(true)
     event.preventDefault()
 
+    const { data: dataUsername, error: errorUsername } = await supabase.from('profiles').select(`username`).eq('username', username)
+    if(dataUsername || errorUsername) {
+      alert("Username is occupied already")
+      return
+    }
+
     const { data, error } = await supabase.auth.signInWithOtp({
       email: email,
       options: {
