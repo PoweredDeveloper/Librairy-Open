@@ -1,4 +1,5 @@
 'use client'
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import UserAvatar from './../../components/Presets/User/Avatar';
 import { useState } from 'react';
 
@@ -18,9 +19,10 @@ export default function UploadAvatar({
   uid: string | undefined
   url: string | null
   size: number
-  onChange: (url: string, file: File) => void,
+  onChange: (url: string) => void,
 }) {
   const [uploading, setUploading] = useState(false)
+  const supabase = createClientComponentClient()
 
   const uploadAvatar: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
     try {
@@ -36,17 +38,22 @@ export default function UploadAvatar({
       const file = event.target.files[0]
       const fileSize = Math.ceil((file.size / 1024 / 1024) * 10) / 10
       const fileExt = file.name.toLowerCase().split('.').pop() || ''
-
+      
       if (!allowedFileExt.includes(fileExt)) {
         throw new Error("File extension is not satisfied")
       }
       if (fileSize > 5) {
         throw new Error("file is too big")
       }
-
+      
       const filePath = `${uid}-${Math.random()}.${fileExt}`
+      const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
 
-      onChange(filePath, file)
+      if (uploadError) {
+        throw uploadError
+      }
+
+      onChange(filePath)
     } catch (error) {
       alert('Error uploading avatar! ' + error)
     } finally {

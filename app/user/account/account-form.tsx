@@ -20,8 +20,6 @@ export default function AccountForm({user}: {user: User | null}) {
   const [loading, setLoading] = useState(true)
 
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
-  const [avatar_preview, setAvatarPreview] = useState<string | null>(null)
-  const [newAvatarFile, setNewAvatarFile] = useState<File>(null!)
 
   const [username, setUsername] = useState<string | null>(null)
   const [firstName, setFirstName] = useState<string | null>(null)
@@ -91,19 +89,6 @@ export default function AccountForm({user}: {user: User | null}) {
     }
   }
 
-  async function uploadNewAvatar(file: File) {
-    if (!avatar_preview) return
-    try {
-      const { error: uploadError } = await supabase.storage.from('avatars').upload(avatar_preview, file)
-  
-      if (uploadError) {
-        throw uploadError
-      }
-    } catch (error) {
-      alert("Error while upload an avatar")
-    }
-  }
-
   return (
     <form className='bg-white max-w-[1200px] w-max my-0 lg:my-12 lg:rounded-lg lg:p-12 p-6'>
       <div>
@@ -154,11 +139,11 @@ export default function AccountForm({user}: {user: User | null}) {
 
           <UploadAvatar
             uid={user?.id}
-            url={avatar_preview ? avatar_preview : avatar_url}
+            url={avatar_url}
             size={64}
-            onChange={(url, file) => {
-              setAvatarPreview(url)
-              setNewAvatarFile(file)
+            onChange={(url) => {
+              setAvatarUrl(url)
+              updateProfile({ avatar_url: url })
             }}
           />
 
@@ -379,7 +364,6 @@ export default function AccountForm({user}: {user: User | null}) {
         type="submit"
         disabled={loading}
         onClick={() => {
-          uploadNewAvatar(newAvatarFile)
           updateProfile({
             country: userCountry,
             first_name: firstName,
