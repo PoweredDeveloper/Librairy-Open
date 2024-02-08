@@ -18,7 +18,7 @@ export default function Page() {
             Здесь!
           </h1>
           <p className='mt-3 text-center flex gap-1 items-center lg:text-left text-brown-900'>Онлайн библиотека уже с ИИ.<span className='hidden sm:block'>Испытайте чтение по новому</span></p>
-          <Link href='/signup' className='accent-button flex items-center px-4 md:p-2 lg:px-3 gap-3 mt-4 md:mt-8 lg:mt-14 w-min'>
+          <Link href='/signup' className='accent-button flex items-center px-4 mb-2 md:p-2 lg:px-3 gap-3 mt-4 md:mt-8 lg:mt-14 w-min'>
             <span>Начать</span>
             <FaArrowRight className='block md:hidden' />
             <svg className='hidden md:block' width="96" height="16" viewBox="0 0 96 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -27,7 +27,7 @@ export default function Page() {
           </Link>
       </div>
       <div className="relative hidden md:block self-end">
-        <div className="absolute bottom-0 right-0 h-[40rem] w-[40rem] radial-gradient-main"></div>
+        <div className="absolute bottom-0 right-0 h-[40rem] w-[40rem] radial-gradient-main -z-10"></div>
       </div>
     </div>
   )
