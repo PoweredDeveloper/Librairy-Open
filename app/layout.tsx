@@ -1,25 +1,32 @@
+'use client'
 import '@/app/css/global.css'
 import '@/app/utils/customFunctions';
 import Header from '@/app/components/Header/Header'
 import { Commissioner } from 'next/font/google'
 import { cookies } from 'next/headers';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { User, createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useEffect, useState } from 'react';
 
-const inter = Commissioner({ weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'], subsets: ['cyrillic', 'latin'] })
+const commissioner = Commissioner({ weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900'], subsets: ['cyrillic', 'latin'] })
 
 export default async function RootLayout({
   children
 }: {
   children: React.ReactNode
 }) {
+  const [user, setUser] = useState<User | null>(null!)
   const cookieStore = cookies()
   const supabase = createServerComponentClient({ cookies: () => cookieStore })
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
+  useEffect(() => {
+    const getData = async () => {
+      const { data: { user: gettedUser } } = await supabase.auth.getUser()
+      setUser(gettedUser)
+    }
+    getData()
+  }, [supabase])
   
   return (
-    <html lang="ru" className={`${inter.className}`}>
+    <html lang="ru" className={`${commissioner.className}`}>
       <head>
         <meta httpEquiv="Content-Type" content="text/html;charset=UTF-8" />
         <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

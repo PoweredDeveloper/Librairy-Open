@@ -77,11 +77,8 @@ export default function AccountForm({user}: {user: User | null}) {
       if (!updateValues) return
 
       const { error } = await supabase.from('profiles').upsert({id: user?.id as string, ...updateValues})
-      await supabase.auth.refreshSession() 
 
       if (error) throw error
-
-      alert('Profile updated!')
     } catch (error) {
       alert('Error updating the data!')
     } finally {
