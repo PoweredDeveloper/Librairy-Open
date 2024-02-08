@@ -1,8 +1,14 @@
 'use client'
 import UploadAvatar from './upload-avatar'
 import { AiFillPicture } from "react-icons/ai";
-import { ChangeEventHandler, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { createClientComponentClient, User } from '@supabase/auth-helpers-nextjs'
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Librairy | Настройки аккаунта',
+  description: 'Страница настройки аккаунта'
+}
 
 type Country = {id: number, country: string}
 
