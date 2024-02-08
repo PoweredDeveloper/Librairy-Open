@@ -4,7 +4,7 @@ import { AiFillPicture } from "react-icons/ai";
 import { useCallback, useEffect, useState } from 'react'
 import { createClientComponentClient, User } from '@supabase/auth-helpers-nextjs'
 import { Metadata } from 'next';
-import Router from 'next/router';
+import { useRouter } from 'next/navigation';
 
 export const metadata: Metadata = {
   title: 'Librairy | Настройки аккаунта',
@@ -24,6 +24,7 @@ const countries: Array<Country> = [
 
 export default function AccountForm({user}: {user: User | null}) {
   const supabase = createClientComponentClient()
+  const router = useRouter()
   const [loading, setLoading] = useState(true)
 
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
@@ -84,6 +85,7 @@ export default function AccountForm({user}: {user: User | null}) {
       if (!updateValues) return
 
       const { data: dataUsername, error: errorUsername } = await supabase.from('profiles').select(`username`).eq('username', username)
+      console.log(dataUsername)
       if(dataUsername || errorUsername) throw new Error('Username is ocupied')
 
       const { error } = await supabase.from('profiles').upsert({id: user?.id as string, ...updateValues})
@@ -93,7 +95,7 @@ export default function AccountForm({user}: {user: User | null}) {
       alert('Error updating the data!')
     } finally {
       setLoading(false)
-      Router.reload()
+      router.refresh()
     }
   }
 
