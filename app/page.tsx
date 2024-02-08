@@ -27,7 +27,7 @@ export default function Page() {
           </Link>
       </div>
       <div className="relative hidden md:block">
-        <div className="absolute bottom-0 right-0 h-[40rem] w-[40rem] radial-gradient"></div>
+        <div className="absolute bottom-0 right-0 h-[40rem] w-[40rem] radial-gradient-main"></div>
       </div>
     </div>
   )
