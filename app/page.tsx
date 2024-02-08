@@ -26,7 +26,7 @@ export default function Page() {
             </svg>
           </Link>
       </div>
-      <div className="relative hidden md:block">
+      <div className="relative hidden md:block self-end">
         <div className="absolute bottom-0 right-0 h-[40rem] w-[40rem] radial-gradient-main"></div>
       </div>
     </div>
