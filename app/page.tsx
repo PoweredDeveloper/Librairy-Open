@@ -26,8 +26,8 @@ export default function Page() {
             </svg>
           </Link>
       </div>
-      <div className='relative overflow-hidden hidden lg:block'>
-        <div className='absolute bottom-0 right-0 w-12 aspect-square bg-[radial-gradient(circle at 100% bottom, rgba(255,154,84,1) 10%, rgba(255,255,255,0) 90%)]' />
+      <div className="relative hidden md:block">
+        <div className="absolute bottom-0 right-0 h-[40rem] w-[40rem] radial-gradient"></div>
       </div>
     </div>
   )

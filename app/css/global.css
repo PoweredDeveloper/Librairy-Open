@@ -49,4 +49,11 @@
     @apply button bg-orange-500 text-white border-orange-500 hover:border-orange-400 hover:bg-orange-400;
     transition: 0.15s;
   }
+  .radial-gradient-main {
+    background: radial-gradient(
+      circle at 100% 100%,
+      rgba(255, 154, 84, 1) 10%,
+      rgba(255, 255, 255, 0) 70%
+    )
+  }
 }
