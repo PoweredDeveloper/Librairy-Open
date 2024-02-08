@@ -84,8 +84,7 @@ export default function AccountForm({user}: {user: User | null}) {
 
       if (!updateValues) return
 
-      const { data: dataUsername, error: errorUsername } = await supabase.from('profiles').select(`username`).eq('username', username)
-      console.log(dataUsername)
+      const { data: dataUsername, error: errorUsername } = await supabase.from('profiles').select(`username id`).eq('username', username).neq('id', user?.id)
       if(dataUsername || errorUsername) throw new Error('Username is ocupied')
 
       const { error } = await supabase.from('profiles').upsert({id: user?.id as string, ...updateValues})
