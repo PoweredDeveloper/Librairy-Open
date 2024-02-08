@@ -1,5 +1,4 @@
 'use client'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 import UserAvatar from './../../components/Presets/User/Avatar';
 import { useState } from 'react';
 
@@ -22,7 +21,6 @@ export default function UploadAvatar({
   onChange: (url: string, file: File) => void,
 }) {
   const [uploading, setUploading] = useState(false)
-  const supabase = createClientComponentClient()
 
   const uploadAvatar: React.ChangeEventHandler<HTMLInputElement> = async (event) => {
     try {

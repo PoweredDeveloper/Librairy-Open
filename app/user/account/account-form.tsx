@@ -79,8 +79,10 @@ export default function AccountForm({user}: {user: User | null}) {
       if (!updateValues) return
 
       const { error } = await supabase.from('profiles').upsert({id: user?.id as string, ...updateValues})
+      await supabase.auth.refreshSession() 
 
       if (error) throw error
+
       alert('Profile updated!')
     } catch (error) {
       alert('Error updating the data!')
@@ -377,6 +379,7 @@ export default function AccountForm({user}: {user: User | null}) {
         type="submit"
         disabled={loading}
         onClick={() => {
+          uploadNewAvatar(newAvatarFile)
           updateProfile({
             country: userCountry,
             first_name: firstName,
@@ -385,7 +388,6 @@ export default function AccountForm({user}: {user: User | null}) {
             description,
             username,
           })
-          uploadNewAvatar(newAvatarFile)
         }}
         className="rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
       >
