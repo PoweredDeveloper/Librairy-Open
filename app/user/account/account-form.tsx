@@ -4,6 +4,7 @@ import { AiFillPicture } from "react-icons/ai";
 import { useCallback, useEffect, useState } from 'react'
 import { createClientComponentClient, User } from '@supabase/auth-helpers-nextjs'
 import { Metadata } from 'next';
+import { useRouter } from 'next/router';
 
 export const metadata: Metadata = {
   title: 'Librairy | Настройки аккаунта',
@@ -23,6 +24,7 @@ const countries: Array<Country> = [
 
 export default function AccountForm({user}: {user: User | null}) {
   const supabase = createClientComponentClient()
+  const router = useRouter()
   const [loading, setLoading] = useState(true)
 
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
@@ -89,6 +91,7 @@ export default function AccountForm({user}: {user: User | null}) {
       alert('Error updating the data!')
     } finally {
       setLoading(false)
+      router.push('/user/account')
     }
   }
 
