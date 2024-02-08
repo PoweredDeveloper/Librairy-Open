@@ -4,21 +4,25 @@ import { AiFillPicture } from "react-icons/ai";
 import { ChangeEventHandler, useCallback, useEffect, useState } from 'react'
 import { createClientComponentClient, User } from '@supabase/auth-helpers-nextjs'
 
-type Country = {id: number, icon: string, country: string}
+type Country = {id: number, country: string}
 
 const countries: Array<Country> = [
-  { id: 1, icon: '🇷🇺', country: 'Russia'},
-  { id: 2, icon: '🇨🇳', country: 'China'},
-  { id: 5, icon: '🇧🇾', country: 'Belarus'},
-  { id: 3, icon: '🇰🇿', country: 'Kazakhstan'},
-  { id: 6, icon: '🇺🇸', country: 'United States'},
-  { id: 4, icon: '🇬🇧', country: 'United Kingdom'},
+  { id: 1, country: 'Россия'},
+  { id: 2, country: 'Китай'},
+  { id: 5, country: 'Беларусь'},
+  { id: 3, country: 'Казакхстан'},
+  { id: 6, country: 'Соединенные Штаты'},
+  { id: 4, country: 'Великобритания'},
 ]
 
 export default function AccountForm({user}: {user: User | null}) {
   const supabase = createClientComponentClient()
   const [loading, setLoading] = useState(true)
+
   const [avatar_url, setAvatarUrl] = useState<string | null>(null)
+  const [avatar_preview, setAvatarPreview] = useState<string | null>(null)
+  const [newAvatarFile, setNewAvatarFile] = useState<File>(null!)
+
   const [username, setUsername] = useState<string | null>(null)
   const [firstName, setFirstName] = useState<string | null>(null)
   const [lastName, setLastName] = useState<string | null>(null)
@@ -85,19 +89,32 @@ export default function AccountForm({user}: {user: User | null}) {
     }
   }
 
+  async function uploadNewAvatar(file: File) {
+    if (!avatar_preview) return
+    try {
+      const { error: uploadError } = await supabase.storage.from('avatars').upload(avatar_preview, file)
+  
+      if (uploadError) {
+        throw uploadError
+      }
+    } catch (error) {
+      alert("Error while upload an avatar")
+    }
+  }
+
   return (
     <form className='bg-white max-w-[1200px] w-max my-0 lg:my-12 lg:rounded-lg lg:p-12 p-6'>
       <div>
         <div className="border-b border-gray-900/10 pb-12 mb-8">
-          <h2 className="text-lg font-semibold leading-7 text-gray-900">Edit Profile</h2>
+          <h2 className="text-lg font-semibold leading-7 text-gray-900">Редактировать профиль</h2>
           <p className="mt-1 text-sm leading-6 text-gray-600">
-            This information will be displayed publicly so be careful what you share.
+            Эта информация будет размещена публично, будьте осторожны с тем, чем вы делитесь.
           </p>
 
           <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div className="sm:col-span-4">
               <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
-                Username
+                Имя пользователя
               </label>
             <div className="mt-2">
               <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-orange-600 sm:max-w-md">
@@ -117,7 +134,7 @@ export default function AccountForm({user}: {user: User | null}) {
 
           <div className="col-span-full">
             <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
-              About
+              О себе
             </label>
             <div className="mt-2">
               <textarea
@@ -130,24 +147,22 @@ export default function AccountForm({user}: {user: User | null}) {
                 defaultValue={''}
               />
             </div>
-            <p className="mt-3 text-sm leading-6 text-gray-600">Write a few sentences about yourself.</p>
+            <p className="mt-3 text-sm leading-6 text-gray-600">Напишите пару предложений о себе</p>
           </div>
 
           <UploadAvatar
             uid={user?.id}
-            url={avatar_url}
+            url={avatar_preview ? avatar_preview : avatar_url}
             size={64}
-            onChange={(url) => {
-              setAvatarUrl(url)
-              updateProfile({
-                avatar_url: avatar_url,
-              })
+            onChange={(url, file) => {
+              setAvatarPreview(url)
+              setNewAvatarFile(file)
             }}
           />
 
           <div className="col-span-full">
             <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">
-              Cover photo
+              Баннер
             </label>
             <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
               <div className="text-center">
@@ -157,12 +172,12 @@ export default function AccountForm({user}: {user: User | null}) {
                     htmlFor="file-upload"
                     className="relative cursor-pointer rounded-md bg-white font-semibold text-orange-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-orange-600 focus-within:ring-offset-2 hover:text-orange-500"
                   >
-                    <span>Upload a file</span>
+                    <span>Выберете файл</span>
                     <input id="file-upload" name="file-upload" type="file" className="sr-only" />
                   </label>
-                  <p className="pl-1">or drag and drop</p>
+                  <p className="pl-1">или перетащите сюда</p>
                 </div>
-                <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF up to 3MB</p>
+                <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF до 3MB</p>
               </div>
             </div>
           </div>
@@ -170,13 +185,13 @@ export default function AccountForm({user}: {user: User | null}) {
       </div>
 
       <div className="border-b border-gray-900/10 pb-12 mb-8">
-        <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
-        <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
+        <h2 className="text-base font-semibold leading-7 text-gray-900">Персональная информация</h2>
+        <p className="mt-1 text-sm leading-6 text-gray-600"></p>
 
         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
           <div className="sm:col-span-3">
             <label htmlFor="first-name" className="block text-sm font-medium leading-6 text-gray-900">
-              First name
+              Имя
             </label>
             <div className="mt-2">
               <input
@@ -193,7 +208,7 @@ export default function AccountForm({user}: {user: User | null}) {
 
           <div className="sm:col-span-3">
             <label htmlFor="last-name" className="block text-sm font-medium leading-6 text-gray-900">
-              Last name
+              Фамилия
             </label>
             <div className="mt-2">
               <input
@@ -210,7 +225,7 @@ export default function AccountForm({user}: {user: User | null}) {
 
           <div className="sm:col-span-4">
             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-              Email address
+              Эл. почта
             </label>
             <div className="mt-2">
               <input
@@ -227,7 +242,7 @@ export default function AccountForm({user}: {user: User | null}) {
 
           <div className="sm:col-span-3">
             <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
-              Country
+              Страна проживания
             </label>
             <div className="mt-2 cursor-pointer">
               <select
@@ -237,10 +252,10 @@ export default function AccountForm({user}: {user: User | null}) {
                 value={userCountry || 0}
                 className="block w-full font-sans rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:max-w-xs sm:text-sm sm:leading-6"
               >
-                <option disabled value={0}>Choose Country</option>
+                <option disabled value={0}>Выбрать страну</option>
                 {countries.map((country: Country) => {
                   return (<option key={country.id} value={country.id} className='p-1 cursor-pointer font-sans'>
-                    {`${country.icon}  |  ${country.country}`}
+                    {`${country.country}`}
                   </option>)
                 })}
               </select>
@@ -355,7 +370,7 @@ export default function AccountForm({user}: {user: User | null}) {
     <div className="mt-6 flex items-center justify-end gap-x-6">
       <form action="/auth/signout" method="post">
         <button className="text-sm font-semibold leading-6 text-gray-900" type="submit">
-          Sign out
+          Выйти
         </button>
       </form>
       <button
@@ -363,16 +378,18 @@ export default function AccountForm({user}: {user: User | null}) {
         disabled={loading}
         onClick={() => {
           updateProfile({
-            first_name: firstName,
-            description: description,
-            username: username,
             country: userCountry,
-            last_name: lastName
+            first_name: firstName,
+            last_name: lastName,
+            avatar_url: avatar_preview,
+            description,
+            username,
           })
+          uploadNewAvatar(newAvatarFile)
         }}
         className="rounded-md bg-orange-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-orange-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-orange-600"
       >
-        {loading ? 'Saving...' : 'Save'}
+        {loading ? 'Сохранение...' : 'Сохранить'}
       </button>
     </div>
   </form>

@@ -24,8 +24,10 @@ export default function AuthForm() {
       email: email
     })
 
-    if (error != null) return
-    if (data.user != null || data.session != null) return
+    if (error != null || data.user != null || data.session != null) {
+      setLoading(false)
+      return
+    }
 
     setMessageSended(true)
     setLoading(false)

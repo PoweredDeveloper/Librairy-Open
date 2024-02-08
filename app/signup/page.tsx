@@ -17,11 +17,11 @@ export default function AuthForm() {
   const [isLoading, setLoading] = useState<boolean>(false)
 
   const signUpNewUser = async (event: FormEvent<HTMLFormElement>) => {
-    setLoading(true)
     if (!/^[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*$/.test(email)) return
     if (username.current.value.length < 3) return
     if (username.current.value.length > 20) return
     if (!/[a-zA-z0-9_-]/.test(username.current.value)) return
+    setLoading(true)
     event.preventDefault()
 
     const { data, error } = await supabase.auth.signInWithOtp({
@@ -33,8 +33,10 @@ export default function AuthForm() {
       }
     })
 
-    if (error != null) return
-    if (data.user != null || data.session != null) return
+    if (error != null || data.user != null || data.session != null) {
+      setLoading(false)
+      return
+    }
 
     setMessageSended(true)
     setLoading(false)

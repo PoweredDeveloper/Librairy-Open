@@ -19,7 +19,7 @@ export default function UploadAvatar({
   uid: string | undefined
   url: string | null
   size: number
-  onChange: (url: string, file?: File, fileExt?: string) => void
+  onChange: (url: string, file: File) => void,
 }) {
   const [uploading, setUploading] = useState(false)
   const supabase = createClientComponentClient()
@@ -47,13 +47,8 @@ export default function UploadAvatar({
       }
 
       const filePath = `${uid}-${Math.random()}.${fileExt}`
-      const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
 
-      if (uploadError) {
-        throw uploadError
-      }
-
-      onChange(filePath, file, fileExt)
+      onChange(filePath, file)
     } catch (error) {
       alert('Error uploading avatar! ' + error)
     } finally {
@@ -64,7 +59,7 @@ export default function UploadAvatar({
   return (
     <div className="col-span-full">
       <label htmlFor="photo" className="block text-sm font-medium leading-6 text-gray-900">
-        Photo
+        Фото профиля
       </label>
       <div className="mt-2 flex items-center gap-x-3">
         <UserAvatar avatarUrl={url} size={size} className='rounded-full' />
@@ -72,10 +67,10 @@ export default function UploadAvatar({
           htmlFor="avatar-upload"
           className="rounded-md cursor-pointer bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mr-2"
         >
-          <span>{uploading ? 'Uploading...' : 'Change'}</span>
+          <span>{uploading ? 'Загузка...' : 'Изменить'}</span>
           <input onChange={uploadAvatar} disabled={uploading} id="avatar-upload" accept='image/*' name="avatar-upload" type="file" className="sr-only" />
         </label>
-        <p className="text-sm leading-5 text-gray-600">PNG, JPG, GIF up to 5MB</p>
+        <p className="text-sm leading-5 text-gray-600">PNG, JPG, GIF до 5MB</p>
       </div>
     </div>
   )
