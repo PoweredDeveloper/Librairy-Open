@@ -1,3 +1,9 @@
+/**
+ * ========== L I B R A I R Y ==========
+ * Script written by Istomin Mikhail
+ * PoweredDeveloper <https://github.com/PoweredDeveloper>
+ */
+
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
